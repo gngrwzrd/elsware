@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>antaresia.management.elsewhere.svn</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="antaresia.management.elsewhere-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Elswhere</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;antaresia ::
+        Package&nbsp;management ::
+        <a href="antaresia.management.elsewhere-module.html">Package&nbsp;elsewhere</a> ::
+        Module&nbsp;svn
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="antaresia.management.elsewhere.svn-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="antaresia.management.elsewhere.svn-module.html">Module antaresia.management.elsewhere.svn</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module antaresia.management.elsewhere.ssh=antaresia.management.elsewhere.ssh-module.html"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-0', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">,</tt><tt id="link-1" class="py-name" targets="Module antaresia.management.elsewhere.base=antaresia.management.elsewhere.base-module.html"><a title="antaresia.management.elsewhere.base" class="py-name" href="#" onclick="return doclink('link-1', 'base', 'link-1');">base</a></tt><tt class="py-op">,</tt><tt id="link-2" class="py-name" targets="Module antaresia.management.elsewhere.actions=antaresia.management.elsewhere.actions-module.html"><a title="antaresia.management.elsewhere.actions" class="py-name" href="#" onclick="return doclink('link-2', 'actions', 'link-2');">actions</a></tt><tt class="py-op">,</tt><tt class="py-name">re</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-3" class="py-name"><a title="antaresia.management.elsewhere.actions" class="py-name" href="#" onclick="return doclink('link-3', 'actions', 'link-2');">actions</a></tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="SVNRepo"></a><div id="SVNRepo-def"><a name="L4"></a><tt class="py-lineno"> 4</tt> <a class="py-toggle" href="#" id="SVNRepo-toggle" onclick="return toggle('SVNRepo');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="antaresia.management.elsewhere.svn.SVNRepo-class.html">SVNRepo</a><tt class="py-op">(</tt><tt class="py-base-class">object</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SVNRepo-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="SVNRepo-expanded"><a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">        SVN repository command wrapper.</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line">        <tt id="link-4" class="py-name" targets="Variable antaresia.management.elsewhere.scm.GitUpdateAction.not_a_repo=antaresia.management.elsewhere.scm.GitUpdateAction-class.html#not_a_repo,Variable antaresia.management.elsewhere.svn.SVNRepo.not_a_repo=antaresia.management.elsewhere.svn.SVNRepo-class.html#not_a_repo"><a title="antaresia.management.elsewhere.scm.GitUpdateAction.not_a_repo
+antaresia.management.elsewhere.svn.SVNRepo.not_a_repo" class="py-name" href="#" onclick="return doclink('link-4', 'not_a_repo', 'link-4');">not_a_repo</a></tt><tt class="py-op">=</tt><tt class="py-string">"Skipped '.'"</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line">        <tt id="link-5" class="py-name" targets="Variable antaresia.management.elsewhere.scm.GitErrors.not_a_repo_error=antaresia.management.elsewhere.scm.GitErrors-class.html#not_a_repo_error,Variable antaresia.management.elsewhere.svn.SVNRepo.not_a_repo_error=antaresia.management.elsewhere.svn.SVNRepo-class.html#not_a_repo_error"><a title="antaresia.management.elsewhere.scm.GitErrors.not_a_repo_error
+antaresia.management.elsewhere.svn.SVNRepo.not_a_repo_error" class="py-name" href="#" onclick="return doclink('link-5', 'not_a_repo_error', 'link-5');">not_a_repo_error</a></tt><tt class="py-op">=</tt><tt class="py-string">"This directory (%s) does not appear to be a git directy. Got fatal error from shell: Not a git repository (or any of the parent directories): .git"</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line">        <tt id="link-6" class="py-name" targets="Variable antaresia.management.elsewhere.scm.GitErrors.git_not_installed=antaresia.management.elsewhere.scm.GitErrors-class.html#git_not_installed,Variable antaresia.management.elsewhere.svn.SVNRepo.git_not_installed=antaresia.management.elsewhere.svn.SVNRepo-class.html#git_not_installed"><a title="antaresia.management.elsewhere.scm.GitErrors.git_not_installed
+antaresia.management.elsewhere.svn.SVNRepo.git_not_installed" class="py-name" href="#" onclick="return doclink('link-6', 'git_not_installed', 'link-6');">git_not_installed</a></tt><tt class="py-op">=</tt><tt class="py-string">"The git command was not found on the server"</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line">        <tt id="link-7" class="py-name" targets="Variable antaresia.management.elsewhere.apache.ApacheErrors.permission_denied=antaresia.management.elsewhere.apache.ApacheErrors-class.html#permission_denied,Variable antaresia.management.elsewhere.scm.GitErrors.permission_denied=antaresia.management.elsewhere.scm.GitErrors-class.html#permission_denied,Variable antaresia.management.elsewhere.svn.SVNRepo.permission_denied=antaresia.management.elsewhere.svn.SVNRepo-class.html#permission_denied"><a title="antaresia.management.elsewhere.apache.ApacheErrors.permission_denied
+antaresia.management.elsewhere.scm.GitErrors.permission_denied
+antaresia.management.elsewhere.svn.SVNRepo.permission_denied" class="py-name" href="#" onclick="return doclink('link-7', 'permission_denied', 'link-7');">permission_denied</a></tt><tt class="py-op">=</tt><tt class="py-string">"The git repo \"%s\" could not be updated, permission was denied."</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line">        <tt id="link-8" class="py-name" targets="Variable antaresia.management.elsewhere.scm.GitErrors.update_timeout=antaresia.management.elsewhere.scm.GitErrors-class.html#update_timeout,Variable antaresia.management.elsewhere.svn.SVNRepo.update_timeout=antaresia.management.elsewhere.svn.SVNRepo-class.html#update_timeout"><a title="antaresia.management.elsewhere.scm.GitErrors.update_timeout
+antaresia.management.elsewhere.svn.SVNRepo.update_timeout" class="py-name" href="#" onclick="return doclink('link-8', 'update_timeout', 'link-8');">update_timeout</a></tt><tt class="py-op">=</tt><tt class="py-string">"The repository update took too long, it seemed to have timed out."</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line">        <tt id="link-9" class="py-name" targets="Variable antaresia.management.elsewhere.scm.GitErrors.no_previous_head=antaresia.management.elsewhere.scm.GitErrors-class.html#no_previous_head,Variable antaresia.management.elsewhere.svn.SVNRepo.no_previous_head=antaresia.management.elsewhere.svn.SVNRepo-class.html#no_previous_head"><a title="antaresia.management.elsewhere.scm.GitErrors.no_previous_head
+antaresia.management.elsewhere.svn.SVNRepo.no_previous_head" class="py-name" href="#" onclick="return doclink('link-9', 'no_previous_head', 'link-9');">no_previous_head</a></tt><tt class="py-op">=</tt><tt class="py-string">"The git updater know what the previous head was, so it couldn't be reverted."</tt> </tt>
+<a name="SVNRepo.run"></a><div id="SVNRepo.run-def"><a name="L14"></a><tt class="py-lineno">14</tt> <a class="py-toggle" href="#" id="SVNRepo.run-toggle" onclick="return toggle('SVNRepo.run');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="antaresia.management.elsewhere.svn.SVNRepo-class.html#run">run</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SVNRepo.run-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="SVNRepo.run-expanded"><a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line">                <tt class="py-name">exception</tt><tt class="py-op">=</tt><tt class="py-name">None</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">before_head</tt><tt class="py-op">=</tt><tt class="py-name">False</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">make_and_cd_to_dir</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">deployment</tt><tt class="py-op">.</tt><tt class="py-name">clients</tt><tt class="py-op">.</tt><tt id="link-10" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-10', 'ssh', 'link-0');">ssh</a></tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name" targets="Method antaresia.management.elsewhere.apache.BaseApacheAction.command()=antaresia.management.elsewhere.apache.BaseApacheAction-class.html#command,Method antaresia.management.elsewhere.ssh.SSHSession.command()=antaresia.management.elsewhere.ssh.SSHSession-class.html#command"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-11', 'command', 'link-11');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"svn info | grep Revision"</tt><tt class="py-op">)</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line">                <tt class="py-name">i</tt><tt class="py-op">=</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method antaresia.management.elsewhere.ssh.SSHSession.expect()=antaresia.management.elsewhere.ssh.SSHSession-class.html#expect"><a title="antaresia.management.elsewhere.ssh.SSHSession.expect" class="py-name" href="#" onclick="return doclink('link-12', 'expect', 'link-12');">expect</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-string">"Revision: .*"</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name"><a title="antaresia.management.elsewhere.scm.GitUpdateAction.not_a_repo
+antaresia.management.elsewhere.svn.SVNRepo.not_a_repo" class="py-name" href="#" onclick="return doclink('link-13', 'not_a_repo', 'link-4');">not_a_repo</a></tt><tt class="py-op">,</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Variable antaresia.management.elsewhere.ssh.SSHSession.eof=antaresia.management.elsewhere.ssh.SSHSession-class.html#eof"><a title="antaresia.management.elsewhere.ssh.SSHSession.eof" class="py-name" href="#" onclick="return doclink('link-14', 'eof', 'link-14');">eof</a></tt><tt class="py-op">,</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-15" class="py-name" targets="Variable antaresia.management.elsewhere.ssh.SSHSession.timeout=antaresia.management.elsewhere.ssh.SSHSession-class.html#timeout"><a title="antaresia.management.elsewhere.ssh.SSHSession.timeout" class="py-name" href="#" onclick="return doclink('link-15', 'timeout', 'link-15');">timeout</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">i</tt><tt class="py-op">==</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-name">exception</tt><tt class="py-op">=</tt><tt id="link-16" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-16', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">.</tt><tt id="link-17" class="py-name" targets="Class antaresia.management.elsewhere.exceptions.SSHErrorDetected=antaresia.management.elsewhere.exceptions.SSHErrorDetected-class.html"><a title="antaresia.management.elsewhere.exceptions.SSHErrorDetected" class="py-name" href="#" onclick="return doclink('link-17', 'SSHErrorDetected', 'link-17');">SSHErrorDetected</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-18" class="py-name"><a title="antaresia.management.elsewhere.scm.GitErrors.not_a_repo_error
+antaresia.management.elsewhere.svn.SVNRepo.not_a_repo_error" class="py-name" href="#" onclick="return doclink('link-18', 'not_a_repo_error', 'link-5');">not_a_repo_error</a></tt> <tt class="py-op">%</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dirl</tt><tt class="py-op">)</tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">i</tt><tt class="py-op">&gt;</tt><tt class="py-number">1</tt><tt class="py-op">:</tt><tt class="py-name">exception</tt><tt class="py-op">=</tt><tt id="link-19" class="py-name" targets="Module antaresia.management.elsewhere.exceptions=antaresia.management.elsewhere.exceptions-module.html"><a title="antaresia.management.elsewhere.exceptions" class="py-name" href="#" onclick="return doclink('link-19', 'exceptions', 'link-19');">exceptions</a></tt><tt class="py-op">.</tt><tt id="link-20" class="py-name" targets="Class antaresia.management.elsewhere.exceptions.ActionError=antaresia.management.elsewhere.exceptions.ActionError-class.html"><a title="antaresia.management.elsewhere.exceptions.ActionError" class="py-name" href="#" onclick="return doclink('link-20', 'ActionError', 'link-20');">ActionError</a></tt><tt class="py-op">(</tt><tt id="link-21" class="py-name"><a title="antaresia.management.elsewhere.scm.GitErrors.update_timeout
+antaresia.management.elsewhere.svn.SVNRepo.update_timeout" class="py-name" href="#" onclick="return doclink('link-21', 'update_timeout', 'link-8');">update_timeout</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">exception</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt class="py-name">exception</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line">                <tt class="py-name">revision</tt><tt class="py-op">=</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt class="py-name">session</tt><tt class="py-op">.</tt><tt class="py-name">after</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">                <tt class="py-name">regex</tt><tt class="py-op">=</tt><tt class="py-name">re</tt><tt class="py-op">.</tt><tt class="py-name">compile</tt><tt class="py-op">(</tt><tt class="py-string">r'[a-z0-9]{1,}'</tt><tt class="py-op">)</tt> </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">                <tt class="py-name">search</tt><tt class="py-op">=</tt><tt class="py-name">regex</tt><tt class="py-op">.</tt><tt class="py-name">findall</tt><tt class="py-op">(</tt><tt class="py-name">revision</tt><tt class="py-op">)</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">isinstance</tt><tt class="py-op">(</tt><tt class="py-name">search</tt><tt class="py-op">,</tt><tt class="py-name">list</tt><tt class="py-op">)</tt><tt class="py-op">:</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">before_head</tt><tt class="py-op">=</tt><tt class="py-name">search</tt><tt class="py-op">[</tt><tt class="py-number">0</tt><tt class="py-op">]</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-22" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-22', 'command', 'link-11');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"svn --force checkout "</tt> <tt class="py-op">+</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">action_info</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-string">"url"</tt><tt class="py-op">,</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt> <tt class="py-op">+</tt> <tt class="py-string">" ."</tt><tt class="py-op">)</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">                <tt class="py-name">i</tt><tt class="py-op">=</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name"><a title="antaresia.management.elsewhere.ssh.SSHSession.expect" class="py-name" href="#" onclick="return doclink('link-23', 'expect', 'link-12');">expect</a></tt><tt class="py-op">(</tt><tt class="py-op">[</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name" targets="Variable antaresia.management.elsewhere.ssh.SSHSession.permission=antaresia.management.elsewhere.ssh.SSHSession-class.html#permission"><a title="antaresia.management.elsewhere.ssh.SSHSession.permission" class="py-name" href="#" onclick="return doclink('link-24', 'permission', 'link-24');">permission</a></tt><tt class="py-op">,</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name" targets="Variable antaresia.management.elsewhere.ssh.SSHSession.cmnf=antaresia.management.elsewhere.ssh.SSHSession-class.html#cmnf"><a title="antaresia.management.elsewhere.ssh.SSHSession.cmnf" class="py-name" href="#" onclick="return doclink('link-25', 'cmnf', 'link-25');">cmnf</a></tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="antaresia.management.elsewhere.scm.GitUpdateAction.not_a_repo
+antaresia.management.elsewhere.svn.SVNRepo.not_a_repo" class="py-name" href="#" onclick="return doclink('link-26', 'not_a_repo', 'link-4');">not_a_repo</a></tt><tt class="py-op">,</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="antaresia.management.elsewhere.ssh.SSHSession.eof" class="py-name" href="#" onclick="return doclink('link-27', 'eof', 'link-14');">eof</a></tt><tt class="py-op">,</tt><tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name"><a title="antaresia.management.elsewhere.ssh.SSHSession.timeout" class="py-name" href="#" onclick="return doclink('link-28', 'timeout', 'link-15');">timeout</a></tt><tt class="py-op">]</tt><tt class="py-op">)</tt> </tt>
+<a name="L30"></a><tt class="py-lineno">30</tt>  <tt class="py-line">                <tt class="py-name">exception</tt><tt class="py-op">=</tt><tt class="py-name">None</tt> </tt>
+<a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">i</tt><tt class="py-op">==</tt><tt class="py-number">0</tt><tt class="py-op">:</tt> <tt class="py-name">exception</tt><tt class="py-op">=</tt><tt id="link-29" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-29', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">.</tt><tt id="link-30" class="py-name"><a title="antaresia.management.elsewhere.exceptions.SSHErrorDetected" class="py-name" href="#" onclick="return doclink('link-30', 'SSHErrorDetected', 'link-17');">SSHErrorDetected</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="antaresia.management.elsewhere.apache.ApacheErrors.permission_denied
+antaresia.management.elsewhere.scm.GitErrors.permission_denied
+antaresia.management.elsewhere.svn.SVNRepo.permission_denied" class="py-name" href="#" onclick="return doclink('link-31', 'permission_denied', 'link-7');">permission_denied</a></tt> <tt class="py-op">%</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">repo_name</tt><tt class="py-op">)</tt> </tt>
+<a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">i</tt><tt class="py-op">==</tt><tt class="py-number">1</tt><tt class="py-op">:</tt> <tt class="py-name">exception</tt><tt class="py-op">=</tt><tt id="link-32" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-32', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">.</tt><tt id="link-33" class="py-name"><a title="antaresia.management.elsewhere.exceptions.SSHErrorDetected" class="py-name" href="#" onclick="return doclink('link-33', 'SSHErrorDetected', 'link-17');">SSHErrorDetected</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-34" class="py-name"><a title="antaresia.management.elsewhere.scm.GitErrors.git_not_installed
+antaresia.management.elsewhere.svn.SVNRepo.git_not_installed" class="py-name" href="#" onclick="return doclink('link-34', 'git_not_installed', 'link-6');">git_not_installed</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L33"></a><tt class="py-lineno">33</tt>  <tt class="py-line">                <tt class="py-keyword">elif</tt> <tt class="py-name">i</tt><tt class="py-op">==</tt><tt class="py-number">2</tt><tt class="py-op">:</tt> <tt class="py-name">exception</tt><tt class="py-op">=</tt><tt id="link-35" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-35', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="antaresia.management.elsewhere.exceptions.SSHErrorDetected" class="py-name" href="#" onclick="return doclink('link-36', 'SSHErrorDetected', 'link-17');">SSHErrorDetected</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name"><a title="antaresia.management.elsewhere.scm.GitErrors.not_a_repo_error
+antaresia.management.elsewhere.svn.SVNRepo.not_a_repo_error" class="py-name" href="#" onclick="return doclink('link-37', 'not_a_repo_error', 'link-5');">not_a_repo_error</a></tt> <tt class="py-op">%</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">dirl</tt><tt class="py-op">)</tt> </tt>
+<a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-name">exception</tt><tt class="py-op">:</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">                        <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">before_head</tt><tt class="py-op">=</tt><tt class="py-name">None</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">                        <tt class="py-keyword">raise</tt> <tt class="py-name">exception</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-38" class="py-name" targets="Method antaresia.management.elsewhere.ssh.SSHSession.back_to_prompt()=antaresia.management.elsewhere.ssh.SSHSession-class.html#back_to_prompt"><a title="antaresia.management.elsewhere.ssh.SSHSession.back_to_prompt" class="py-name" href="#" onclick="return doclink('link-38', 'back_to_prompt', 'link-38');">back_to_prompt</a></tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="SVNRepo.revert"></a><div id="SVNRepo.revert-def"><a name="L38"></a><tt class="py-lineno">38</tt> <a class="py-toggle" href="#" id="SVNRepo.revert-toggle" onclick="return toggle('SVNRepo.revert');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="antaresia.management.elsewhere.svn.SVNRepo-class.html#revert">revert</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SVNRepo.revert-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="SVNRepo.revert-expanded"><a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">getattr</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">,</tt><tt class="py-string">"before_head"</tt><tt class="py-op">,</tt><tt class="py-name">False</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt id="link-39" class="py-name"><a title="antaresia.management.elsewhere.actions" class="py-name" href="#" onclick="return doclink('link-39', 'actions', 'link-2');">actions</a></tt><tt class="py-op">.</tt><tt id="link-40" class="py-name" targets="Class antaresia.management.elsewhere.exceptions.TransactionRevertError=antaresia.management.elsewhere.exceptions.TransactionRevertError-class.html"><a title="antaresia.management.elsewhere.exceptions.TransactionRevertError" class="py-name" href="#" onclick="return doclink('link-40', 'TransactionRevertError', 'link-40');">TransactionRevertError</a></tt><tt class="py-op">(</tt><tt id="link-41" class="py-name"><a title="antaresia.management.elsewhere.scm.GitErrors.no_previous_head
+antaresia.management.elsewhere.svn.SVNRepo.no_previous_head" class="py-name" href="#" onclick="return doclink('link-41', 'no_previous_head', 'link-9');">no_previous_head</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">deployment</tt><tt class="py-op">.</tt><tt class="py-name">clients</tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-42', 'ssh', 'link-0');">ssh</a></tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">make_and_cd_to_dir</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-43', 'command', 'link-11');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"svn --force checkout -r "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">before_head</tt><tt class="py-op">+</tt><tt class="py-string">" "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">action_info</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-string">"url"</tt><tt class="py-op">,</tt><tt class="py-string">";"</tt><tt class="py-op">)</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="antaresia.management.elsewhere-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Elswhere</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Tue Jun  9 00:16:26 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

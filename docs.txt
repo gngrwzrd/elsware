@@ -1,0 +1,206 @@
+"""
+###DESCRIPTION
+This is the entry point into the 'elsewhere' deploy system. You need to pass 
+the entire DEPLOYMENT hash, and a list of deployment instruction
+names (ie. ['slicehost'] or multiple: ['slicehost','lunarpages'], etc).
+
+Optionally you can pass it named arguments for anything, which gets set
+in the deployment object that gets created. There's already a few required
+options that need to be passed, for some of the default actions.
+
+Required options for default actions:
+	
+	password - Required for ssh logins
+	
+	EX: (this is how the django commands pass things in)
+	base.deploy(settings.DEPLOYMENT,['slicehost'],password='whatever')
+
+### DEPLOYMENTS HASH
+The DEPLOYMENTS hash should be defined like this:
+
+DEPLOYMENTS={
+	
+	'servers':{ #server lookup information
+		'admin@slicehost':{ #a server definition
+			'ip':'67.23.1.83',
+			'user':'admin',
+			'processes':{ #processes that are eligable for start/stop/restart on this server
+				'apache':{
+					'apachectl':'/usr/bin/apachectl',
+				},
+				'fcgi_threaded':{
+					'port':8024
+				}
+			},
+		}
+	},
+	
+	'repos':{ #repository lookup information
+		'rallyo@slicehost':{ #single repository information
+			'type':'git',
+			'url':'git://git.codeendeavor.com/rallyo.git'
+		}
+	},
+	
+	'slicehost':{ #a 'deployment instruction', which contains actions (optionally transactions).
+		'actions':( #actions - processed in order
+			{ 
+				'transaction':( #transactions are created by a hash with the 'transaction' key, and another list of actions.
+					'ssh_login','stop','repo_update','test','start'
+				),
+			},
+			'email','ssh_logout', #actions that don't qualify as transactions.
+		),
+		
+		#defines arguments that are passed to the Action processing instance.
+		'ssh_login':{ #parameters to pass to the action class
+			
+			#the only special key that needs to be in every parameter object, is the 'action_class'.
+			#It can be a shortname, which is registered with the ActionClasses.lookup dict
+			#(see actions.register_action_class), or a class object, which needs to inherit from 
+			#BaseAction
+			
+			#note, that if you don't provide the action_class key, it will use the action name
+			#(in this case 'ssh_login') to look for a registered action class in ActionClasses.lookup
+			
+			'action_class':'ssh_login', #in this example, ssh_login is a shortname that is registered with ActionClasses.lookup
+			
+			#you can put anything else you want in these hashes. As this entire
+			#hash get's passed as an argument to the processing action class.
+			#this makes it highly extendable
+			
+			'server':'admin@slicehost'
+		},
+		'repo_update':({
+			'action_class':'git_updater',
+			'repo':'rallyo@slicehost',
+			'dir':'/var/www/vhosts/deployments/dtesting',
+		}),
+		'stop':({
+			'action_class':'stop',
+			'process':'apache'
+		}),
+		'start':({
+			'action_class':'start',
+			'process':'fcgi_threaded'
+		}),
+	}
+}
+"""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+This module contains all apache actions. The actions
+can start, stop and restart, and can optionally be used
+with sudo.
+
+The action classes are registered with these short names:
+"apache_stop","apache_start","apache_restart"
+
+Stop, and start both support transactions, but restart
+does not support a transaction rollback.
+
+The below example demonstrates all of options, and how
+you need to structure the deployments dictionary to
+support these apache actions.
+
+deployments={
+	'servers':{
+		'admin@example.com':{
+			'ip':'xxx',
+			'user':'xxx',
+			'password':'mypassword', #optional (see #1 note below)
+			'apache':{
+				'apachectl':'/usr/sbin/apachectl',
+				'sudo':True, #if you need sudo, you must supply the password in one of the supported places. (see note below).
+				'password':'mypassword' #optional (see #2 note below)
+			},
+		}
+	},
+	'testallactions':{
+		'actions':(
+			'login','stop','start','restart','logout',
+		),
+		'start':{
+			'action_class':'apache_start',
+			'server':'admin@example.com',
+			'password':'mypassword' #optional (see #3 note below)
+		},
+		'stop':{
+			'action_class':'apache_stop',
+			'server':'admin@example.com',
+			'password_in_opt':'stop_apache_password', #(see #5 note below)
+		},
+		'restart':{
+			'action_class':'apache_restart',
+			'server':'admin@example.com',
+		},
+		'login':{
+			'action_class':'ssh_login',
+			'server':'admin@example.com',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+		}
+	}
+}
+
+Password support tries to be as flexible as possible. For these
+apache actions, when you need to run them in sudo, there are
+always multiple ways you can supply passwords.
+
+The first way, and probably the better option, is to send a keyword
+argument to elswhere when you first run deploy.
+
+EX:
+base.deploy(deployments,["testallactions"],password='mypassword')
+
+By supplying passwords like this, it takes passwords out of
+your config file, and is any easy way to write your own
+commandline scripts, that accept parameters, which get
+passed onto your actions.
+
+The other way to supply passwords is in different configuration
+settings. For these apache actions, there are three possible places,
+other than the what we just described.
+
+(Look in the above confiruration, for the number as noted below)
+
+#1. Generally, if you are putting passwords in these config files,
+it's best to put them here. This way, any other action (other than
+these apache actions) can also use that password. For example,
+the SSHLogin action also needs a password, which looks in the same
+location if it's logging into the same server.
+
+#2. Putting passwords here isolates the password to just these
+apache actions. No other action will look here for passwords
+except these apache ones.
+
+#3 Putting passwords here is even more isolated. Only that specific
+action will look for a password there. In this case, only the
+apache start action will find that password.
+
+#4 The above example of sending passwords through keyword
+arguments.
+
+#5 You can also supply the 'password_in_opt' key which tells
+the action to grab the value from a passed keyword argument
+which was in the original base.deploy(...) call.
+
+Apache actions look for passwords in this order: 
+
+#2,#1,#3,#4,#5
+"""

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="ascii"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>antaresia.management.elsewhere.scp</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css" />
+  <script type="text/javascript" src="epydoc.js"></script>
+</head>
+
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="antaresia.management.elsewhere-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Elswhere</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <span class="breadcrumbs">
+        Package&nbsp;antaresia ::
+        Package&nbsp;management ::
+        <a href="antaresia.management.elsewhere-module.html">Package&nbsp;elsewhere</a> ::
+        Module&nbsp;scp
+      </span>
+    </td>
+    <td>
+      <table cellpadding="0" cellspacing="0">
+        <!-- hide/show private -->
+        <tr><td align="right"><span class="options">[<a href="javascript:void(0);" class="privatelink"
+    onclick="toggle_private();">hide&nbsp;private</a>]</span></td></tr>
+        <tr><td align="right"><span class="options"
+            >[<a href="frames.html" target="_top">frames</a
+            >]&nbsp;|&nbsp;<a href="antaresia.management.elsewhere.scp-pysrc.html"
+            target="_top">no&nbsp;frames</a>]</span></td></tr>
+      </table>
+    </td>
+  </tr>
+</table>
+<h1 class="epydoc">Source Code for <a href="antaresia.management.elsewhere.scp-module.html">Module antaresia.management.elsewhere.scp</a></h1>
+<pre class="py-src">
+<a name="L1"></a><tt class="py-lineno"> 1</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt class="py-name">pexpect</tt><tt class="py-op">,</tt><tt class="py-name">re</tt> </tt>
+<a name="L2"></a><tt class="py-lineno"> 2</tt>  <tt class="py-line"><tt class="py-keyword">import</tt> <tt id="link-0" class="py-name" targets="Module antaresia.management.elsewhere.ssh=antaresia.management.elsewhere.ssh-module.html"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-0', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">,</tt><tt id="link-1" class="py-name" targets="Module antaresia.management.elsewhere.base=antaresia.management.elsewhere.base-module.html"><a title="antaresia.management.elsewhere.base" class="py-name" href="#" onclick="return doclink('link-1', 'base', 'link-1');">base</a></tt><tt class="py-op">,</tt><tt id="link-2" class="py-name" targets="Module antaresia.management.elsewhere.exceptions=antaresia.management.elsewhere.exceptions-module.html"><a title="antaresia.management.elsewhere.exceptions" class="py-name" href="#" onclick="return doclink('link-2', 'exceptions', 'link-2');">exceptions</a></tt> </tt>
+<a name="L3"></a><tt class="py-lineno"> 3</tt>  <tt class="py-line"> </tt>
+<a name="SCPPushAction"></a><div id="SCPPushAction-def"><a name="L4"></a><tt class="py-lineno"> 4</tt> <a class="py-toggle" href="#" id="SCPPushAction-toggle" onclick="return toggle('SCPPushAction');">-</a><tt class="py-line"><tt class="py-keyword">class</tt> <a class="py-def-name" href="antaresia.management.elsewhere.scp.SCPPushAction-class.html">SCPPushAction</a><tt class="py-op">(</tt><tt class="py-base-class">base</tt><tt class="py-op">.</tt><tt class="py-base-class">BaseAction</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SCPPushAction-collapsed" style="display:none;" pad="++" indent="++++"></div><div id="SCPPushAction-expanded"><a name="L5"></a><tt class="py-lineno"> 5</tt>  <tt class="py-line">        <tt class="py-docstring">"""</tt> </tt>
+<a name="L6"></a><tt class="py-lineno"> 6</tt>  <tt class="py-line"><tt class="py-docstring">        The SCP Push action pushes files up to a server</tt> </tt>
+<a name="L7"></a><tt class="py-lineno"> 7</tt>  <tt class="py-line"><tt class="py-docstring">        through scp. Note that because scp is technically</tt> </tt>
+<a name="L8"></a><tt class="py-lineno"> 8</tt>  <tt class="py-line"><tt class="py-docstring">        just over ssh, it's assumed ssh access will work,</tt> </tt>
+<a name="L9"></a><tt class="py-lineno"> 9</tt>  <tt class="py-line"><tt class="py-docstring">        and requires an ssh session concurrently with</tt> </tt>
+<a name="L10"></a><tt class="py-lineno">10</tt>  <tt class="py-line"><tt class="py-docstring">        the scp process. (The scp action takes care of</tt> </tt>
+<a name="L11"></a><tt class="py-lineno">11</tt>  <tt class="py-line"><tt class="py-docstring">        making the ssh session if one isn't already logged</tt> </tt>
+<a name="L12"></a><tt class="py-lineno">12</tt>  <tt class="py-line"><tt class="py-docstring">        in)</tt> </tt>
+<a name="L13"></a><tt class="py-lineno">13</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L14"></a><tt class="py-lineno">14</tt>  <tt class="py-line"><tt class="py-docstring">        In order to implement transactions, this action</tt> </tt>
+<a name="L15"></a><tt class="py-lineno">15</tt>  <tt class="py-line"><tt class="py-docstring">        first logs into your server over ssh, makes a</tt> </tt>
+<a name="L16"></a><tt class="py-lineno">16</tt>  <tt class="py-line"><tt class="py-docstring">        backup for the target server directory.</tt> </tt>
+<a name="L17"></a><tt class="py-lineno">17</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L18"></a><tt class="py-lineno">18</tt>  <tt class="py-line"><tt class="py-docstring">        Files from local are then SCP copied to the server.</tt> </tt>
+<a name="L19"></a><tt class="py-lineno">19</tt>  <tt class="py-line"><tt class="py-docstring">        If transactions need to rallback, the tmp folder</tt> </tt>
+<a name="L20"></a><tt class="py-lineno">20</tt>  <tt class="py-line"><tt class="py-docstring">        is moved back to the original folder.</tt> </tt>
+<a name="L21"></a><tt class="py-lineno">21</tt>  <tt class="py-line"><tt class="py-docstring">        </tt> </tt>
+<a name="L22"></a><tt class="py-lineno">22</tt>  <tt class="py-line"><tt class="py-docstring">        Finalization goes back onto the server through</tt> </tt>
+<a name="L23"></a><tt class="py-lineno">23</tt>  <tt class="py-line"><tt class="py-docstring">        the ssh session, and deletes the tmp folder.</tt> </tt>
+<a name="L24"></a><tt class="py-lineno">24</tt>  <tt class="py-line"><tt class="py-docstring">        """</tt> </tt>
+<a name="L25"></a><tt class="py-lineno">25</tt>  <tt class="py-line">         </tt>
+<a name="L26"></a><tt class="py-lineno">26</tt>  <tt class="py-line">        <tt id="link-3" class="py-name" targets="Variable antaresia.management.elsewhere.scp.SCPPushAction.mkdir_permission_denied=antaresia.management.elsewhere.scp.SCPPushAction-class.html#mkdir_permission_denied"><a title="antaresia.management.elsewhere.scp.SCPPushAction.mkdir_permission_denied" class="py-name" href="#" onclick="return doclink('link-3', 'mkdir_permission_denied', 'link-3');">mkdir_permission_denied</a></tt><tt class="py-op">=</tt><tt class="py-string">"Permission was denied to make the target server directory."</tt> </tt>
+<a name="L27"></a><tt class="py-lineno">27</tt>  <tt class="py-line">        <tt id="link-4" class="py-name" targets="Variable antaresia.management.elsewhere.scp.SCPPushAction.missing_serverdir_key=antaresia.management.elsewhere.scp.SCPPushAction-class.html#missing_serverdir_key"><a title="antaresia.management.elsewhere.scp.SCPPushAction.missing_serverdir_key" class="py-name" href="#" onclick="return doclink('link-4', 'missing_serverdir_key', 'link-4');">missing_serverdir_key</a></tt><tt class="py-op">=</tt><tt class="py-string">"SCP push action requires a 'serverdir' key in the action parameters."</tt> </tt>
+<a name="L28"></a><tt class="py-lineno">28</tt>  <tt class="py-line">        <tt id="link-5" class="py-name" targets="Variable antaresia.management.elsewhere.scp.SCPPushAction.missing_localdir_key=antaresia.management.elsewhere.scp.SCPPushAction-class.html#missing_localdir_key"><a title="antaresia.management.elsewhere.scp.SCPPushAction.missing_localdir_key" class="py-name" href="#" onclick="return doclink('link-5', 'missing_localdir_key', 'link-5');">missing_localdir_key</a></tt><tt class="py-op">=</tt><tt class="py-string">"SCP push action requires a 'localdir' key in the action parameters."</tt> </tt>
+<a name="L29"></a><tt class="py-lineno">29</tt>  <tt class="py-line">         </tt>
+<a name="SCPPushAction.setup"></a><div id="SCPPushAction.setup-def"><a name="L30"></a><tt class="py-lineno">30</tt> <a class="py-toggle" href="#" id="SCPPushAction.setup-toggle" onclick="return toggle('SCPPushAction.setup');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="antaresia.management.elsewhere.scp.SCPPushAction-class.html#setup">setup</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SCPPushAction.setup-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="SCPPushAction.setup-expanded"><a name="L31"></a><tt class="py-lineno">31</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">meta</tt><tt class="py-op">.</tt><tt class="py-name">action_name</tt><tt class="py-op">=</tt><tt class="py-string">"SCPPushAction"</tt> </tt>
+</div><a name="L32"></a><tt class="py-lineno">32</tt>  <tt class="py-line">         </tt>
+<a name="SCPPushAction.validate"></a><div id="SCPPushAction.validate-def"><a name="L33"></a><tt class="py-lineno">33</tt> <a class="py-toggle" href="#" id="SCPPushAction.validate-toggle" onclick="return toggle('SCPPushAction.validate');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="antaresia.management.elsewhere.scp.SCPPushAction-class.html#validate">validate</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SCPPushAction.validate-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="SCPPushAction.validate-expanded"><a name="L34"></a><tt class="py-lineno">34</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">servername</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-6" class="py-name" targets="Method antaresia.management.elsewhere.base.BaseAction.get_server_name()=antaresia.management.elsewhere.base.BaseAction-class.html#get_server_name"><a title="antaresia.management.elsewhere.base.BaseAction.get_server_name" class="py-name" href="#" onclick="return doclink('link-6', 'get_server_name', 'link-6');">get_server_name</a></tt><tt class="py-op">(</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L35"></a><tt class="py-lineno">35</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverinfo</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-7" class="py-name" targets="Method antaresia.management.elsewhere.base.BaseAction.get_server_info()=antaresia.management.elsewhere.base.BaseAction-class.html#get_server_info"><a title="antaresia.management.elsewhere.base.BaseAction.get_server_info" class="py-name" href="#" onclick="return doclink('link-7', 'get_server_info', 'link-7');">get_server_info</a></tt><tt class="py-op">(</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L36"></a><tt class="py-lineno">36</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">localdir</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">action_info</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-string">"localdir"</tt><tt class="py-op">,</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L37"></a><tt class="py-lineno">37</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">action_info</tt><tt class="py-op">.</tt><tt class="py-name">get</tt><tt class="py-op">(</tt><tt class="py-string">"serverdir"</tt><tt class="py-op">,</tt><tt class="py-name">False</tt><tt class="py-op">)</tt> </tt>
+<a name="L38"></a><tt class="py-lineno">38</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt id="link-8" class="py-name" targets="Class antaresia.management.elsewhere.exceptions.ActionRequirementsError=antaresia.management.elsewhere.exceptions.ActionRequirementsError-class.html"><a title="antaresia.management.elsewhere.exceptions.ActionRequirementsError" class="py-name" href="#" onclick="return doclink('link-8', 'ActionRequirementsError', 'link-8');">ActionRequirementsError</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-9" class="py-name"><a title="antaresia.management.elsewhere.scp.SCPPushAction.missing_serverdir_key" class="py-name" href="#" onclick="return doclink('link-9', 'missing_serverdir_key', 'link-4');">missing_serverdir_key</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L39"></a><tt class="py-lineno">39</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">localdir</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt id="link-10" class="py-name"><a title="antaresia.management.elsewhere.exceptions.ActionRequirementsError" class="py-name" href="#" onclick="return doclink('link-10', 'ActionRequirementsError', 'link-8');">ActionRequirementsError</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-11" class="py-name"><a title="antaresia.management.elsewhere.scp.SCPPushAction.missing_localdir_key" class="py-name" href="#" onclick="return doclink('link-11', 'missing_localdir_key', 'link-5');">missing_localdir_key</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L40"></a><tt class="py-lineno">40</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ip</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">user</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-12" class="py-name" targets="Method antaresia.management.elsewhere.base.BaseAction.get_ip_and_user()=antaresia.management.elsewhere.base.BaseAction-class.html#get_ip_and_user"><a title="antaresia.management.elsewhere.base.BaseAction.get_ip_and_user" class="py-name" href="#" onclick="return doclink('link-12', 'get_ip_and_user', 'link-12');">get_ip_and_user</a></tt><tt class="py-op">(</tt><tt class="py-name">True</tt><tt class="py-op">)</tt> </tt>
+<a name="L41"></a><tt class="py-lineno">41</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">password</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-13" class="py-name" targets="Method antaresia.management.elsewhere.base.BaseAction.get_password()=antaresia.management.elsewhere.base.BaseAction-class.html#get_password"><a title="antaresia.management.elsewhere.base.BaseAction.get_password" class="py-name" href="#" onclick="return doclink('link-13', 'get_password', 'link-13');">get_password</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverinfo</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">action_info</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">deployment</tt><tt class="py-op">.</tt><tt class="py-name">options</tt><tt class="py-op">)</tt> </tt>
+<a name="L42"></a><tt class="py-lineno">42</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">password</tt><tt class="py-op">:</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">password</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-14" class="py-name" targets="Method antaresia.management.elsewhere.base.BaseAction.get_password_in_opt()=antaresia.management.elsewhere.base.BaseAction-class.html#get_password_in_opt"><a title="antaresia.management.elsewhere.base.BaseAction.get_password_in_opt" class="py-name" href="#" onclick="return doclink('link-14', 'get_password_in_opt', 'link-14');">get_password_in_opt</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverinfo</tt><tt class="py-op">,</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">action_info</tt><tt class="py-op">)</tt> </tt>
+<a name="L43"></a><tt class="py-lineno">43</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">password</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt id="link-15" class="py-name"><a title="antaresia.management.elsewhere.exceptions" class="py-name" href="#" onclick="return doclink('link-15', 'exceptions', 'link-2');">exceptions</a></tt><tt class="py-op">.</tt><tt id="link-16" class="py-name"><a title="antaresia.management.elsewhere.exceptions.ActionRequirementsError" class="py-name" href="#" onclick="return doclink('link-16', 'ActionRequirementsError', 'link-8');">ActionRequirementsError</a></tt><tt class="py-op">(</tt><tt id="link-17" class="py-name" targets="Class antaresia.management.elsewhere.apache.ApacheErrors=antaresia.management.elsewhere.apache.ApacheErrors-class.html"><a title="antaresia.management.elsewhere.apache.ApacheErrors" class="py-name" href="#" onclick="return doclink('link-17', 'ApacheErrors', 'link-17');">ApacheErrors</a></tt><tt class="py-op">.</tt><tt id="link-18" class="py-name" targets="Variable antaresia.management.elsewhere.apache.ApacheErrors.password_required=antaresia.management.elsewhere.apache.ApacheErrors-class.html#password_required"><a title="antaresia.management.elsewhere.apache.ApacheErrors.password_required" class="py-name" href="#" onclick="return doclink('link-18', 'password_required', 'link-18');">password_required</a></tt><tt class="py-op">)</tt> </tt>
+</div><a name="L44"></a><tt class="py-lineno">44</tt>  <tt class="py-line">         </tt>
+<a name="SCPPushAction.run"></a><div id="SCPPushAction.run-def"><a name="L45"></a><tt class="py-lineno">45</tt> <a class="py-toggle" href="#" id="SCPPushAction.run-toggle" onclick="return toggle('SCPPushAction.run');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="antaresia.management.elsewhere.scp.SCPPushAction-class.html#run">run</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SCPPushAction.run-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="SCPPushAction.run-expanded"><a name="L46"></a><tt class="py-lineno">46</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-19" class="py-name" targets="Method antaresia.management.elsewhere.base.BaseAction.get_logged_in_client()=antaresia.management.elsewhere.base.BaseAction-class.html#get_logged_in_client"><a title="antaresia.management.elsewhere.base.BaseAction.get_logged_in_client" class="py-name" href="#" onclick="return doclink('link-19', 'get_logged_in_client', 'link-19');">get_logged_in_client</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">servername</tt><tt class="py-op">,</tt><tt id="link-20" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-20', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">.</tt><tt id="link-21" class="py-name" targets="Class antaresia.management.elsewhere.ssh.SSHSession=antaresia.management.elsewhere.ssh.SSHSession-class.html"><a title="antaresia.management.elsewhere.ssh.SSHSession" class="py-name" href="#" onclick="return doclink('link-21', 'SSHSession', 'link-21');">SSHSession</a></tt><tt class="py-op">.</tt><tt id="link-22" class="py-name" targets="Variable antaresia.management.elsewhere.ssh.SSHSession.protocol=antaresia.management.elsewhere.ssh.SSHSession-class.html#protocol"><a title="antaresia.management.elsewhere.ssh.SSHSession.protocol" class="py-name" href="#" onclick="return doclink('link-22', 'protocol', 'link-22');">protocol</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L47"></a><tt class="py-lineno">47</tt>  <tt class="py-line">                <tt class="py-comment">#TODO: if not shell:</tt> </tt>
+<a name="L48"></a><tt class="py-lineno">48</tt>  <tt class="py-line"><tt class="py-comment"></tt>                <tt class="py-name">splits</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">.</tt><tt class="py-name">split</tt><tt class="py-op">(</tt><tt class="py-string">"/"</tt><tt class="py-op">)</tt> </tt>
+<a name="L49"></a><tt class="py-lineno">49</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">splits</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt> <tt class="py-keyword">or</tt> <tt class="py-name">splits</tt><tt class="py-op">[</tt><tt class="py-op">-</tt><tt class="py-number">1</tt><tt class="py-op">]</tt><tt class="py-op">==</tt><tt class="py-string">""</tt><tt class="py-op">:</tt><tt class="py-name">splits</tt><tt class="py-op">.</tt><tt class="py-name">pop</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L50"></a><tt class="py-lineno">50</tt>  <tt class="py-line">                <tt class="py-name">splits</tt><tt class="py-op">.</tt><tt class="py-name">pop</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+<a name="L51"></a><tt class="py-lineno">51</tt>  <tt class="py-line">                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">targetdir</tt><tt class="py-op">=</tt><tt class="py-string">"/"</tt><tt class="py-op">.</tt><tt class="py-name">join</tt><tt class="py-op">(</tt><tt class="py-name">splits</tt><tt class="py-op">)</tt> </tt>
+<a name="L52"></a><tt class="py-lineno">52</tt>  <tt class="py-line">                <tt class="py-comment">#TODO: add expect for all interactions</tt> </tt>
+<a name="L53"></a><tt class="py-lineno">53</tt>  <tt class="py-line"><tt class="py-comment"></tt>                <tt class="py-comment">#TODO: Fix these permissions problems.</tt> </tt>
+<a name="L54"></a><tt class="py-lineno">54</tt>  <tt class="py-line"><tt class="py-comment"></tt>                <tt class="py-comment">#i=shell.expect(["mkdir: cannot create directory",shell.eof,shell.timeout])</tt> </tt>
+<a name="L55"></a><tt class="py-lineno">55</tt>  <tt class="py-line"><tt class="py-comment"></tt>                <tt class="py-comment">#for some reason, pexpect doesn't pick of permission denied on the mkdir commands.</tt> </tt>
+<a name="L56"></a><tt class="py-lineno">56</tt>  <tt class="py-line"><tt class="py-comment"></tt>                <tt class="py-comment">#so i have to catch it with timeouts.</tt> </tt>
+<a name="L57"></a><tt class="py-lineno">57</tt>  <tt class="py-line"><tt class="py-comment"></tt>                <tt class="py-comment">#if i==2 or i==0: raise exceptions.SSHErrorDetected(self.mkdir_permission_denied)</tt> </tt>
+<a name="L58"></a><tt class="py-lineno">58</tt>  <tt class="py-line"><tt class="py-comment"></tt>                <tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpcopy</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">targetdir</tt><tt class="py-op">+</tt><tt class="py-string">"/__tmp__"</tt> </tt>
+<a name="L59"></a><tt class="py-lineno">59</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-23" class="py-name" targets="Method antaresia.management.elsewhere.apache.BaseApacheAction.command()=antaresia.management.elsewhere.apache.BaseApacheAction-class.html#command,Method antaresia.management.elsewhere.ssh.SSHSession.command()=antaresia.management.elsewhere.ssh.SSHSession-class.html#command"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-23', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"mkdir -p "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">)</tt> </tt>
+<a name="L60"></a><tt class="py-lineno">60</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-24" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-24', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"cd "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">targetdir</tt><tt class="py-op">)</tt> </tt>
+<a name="L61"></a><tt class="py-lineno">61</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-25" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-25', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"mkdir -p __tmp__"</tt><tt class="py-op">)</tt> </tt>
+<a name="L62"></a><tt class="py-lineno">62</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-26" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-26', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"cp -Rf "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">+</tt><tt class="py-string">"/* "</tt><tt class="py-op">+</tt><tt class="py-string">"./__tmp__/"</tt><tt class="py-op">)</tt> </tt>
+<a name="L63"></a><tt class="py-lineno">63</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-27" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-27', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"rm -rf "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">+</tt><tt class="py-string">"/*"</tt><tt class="py-op">)</tt> </tt>
+<a name="L64"></a><tt class="py-lineno">64</tt>  <tt class="py-line">                <tt class="py-name">child</tt><tt class="py-op">=</tt><tt class="py-name">pexpect</tt><tt class="py-op">.</tt><tt class="py-name">spawn</tt><tt class="py-op">(</tt><tt class="py-string">"scp -r -q "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">localdir</tt><tt class="py-op">+</tt><tt class="py-string">" "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">user</tt><tt class="py-op">+</tt><tt class="py-string">"@"</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">ip</tt><tt class="py-op">+</tt><tt class="py-string">":"</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">targetdir</tt><tt class="py-op">)</tt> </tt>
+<a name="L65"></a><tt class="py-lineno">65</tt>  <tt class="py-line">                <tt class="py-name">child</tt><tt class="py-op">.</tt><tt id="link-28" class="py-name" targets="Method antaresia.management.elsewhere.ssh.SSHSession.expect()=antaresia.management.elsewhere.ssh.SSHSession-class.html#expect"><a title="antaresia.management.elsewhere.ssh.SSHSession.expect" class="py-name" href="#" onclick="return doclink('link-28', 'expect', 'link-28');">expect</a></tt><tt class="py-op">(</tt><tt class="py-string">'.ssword:*'</tt><tt class="py-op">)</tt> </tt>
+<a name="L66"></a><tt class="py-lineno">66</tt>  <tt class="py-line">                <tt class="py-name">child</tt><tt class="py-op">.</tt><tt class="py-name">sendline</tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">password</tt><tt class="py-op">)</tt> </tt>
+<a name="L67"></a><tt class="py-lineno">67</tt>  <tt class="py-line">                <tt class="py-name">child</tt><tt class="py-op">.</tt><tt class="py-name">interact</tt><tt class="py-op">(</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L68"></a><tt class="py-lineno">68</tt>  <tt class="py-line">                <tt class="py-comment">#raise exceptions.ActionError("TEST REVERT SCP ACTION")</tt> </tt>
+<a name="L69"></a><tt class="py-lineno">69</tt>  <tt class="py-line"><tt class="py-comment"></tt>         </tt>
+<a name="SCPPushAction.revert"></a><div id="SCPPushAction.revert-def"><a name="L70"></a><tt class="py-lineno">70</tt> <a class="py-toggle" href="#" id="SCPPushAction.revert-toggle" onclick="return toggle('SCPPushAction.revert');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="antaresia.management.elsewhere.scp.SCPPushAction-class.html#revert">revert</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SCPPushAction.revert-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="SCPPushAction.revert-expanded"><a name="L71"></a><tt class="py-lineno">71</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-29" class="py-name"><a title="antaresia.management.elsewhere.base.BaseAction.get_logged_in_client" class="py-name" href="#" onclick="return doclink('link-29', 'get_logged_in_client', 'link-19');">get_logged_in_client</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">servername</tt><tt class="py-op">,</tt><tt id="link-30" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-30', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">.</tt><tt id="link-31" class="py-name"><a title="antaresia.management.elsewhere.ssh.SSHSession" class="py-name" href="#" onclick="return doclink('link-31', 'SSHSession', 'link-21');">SSHSession</a></tt><tt class="py-op">.</tt><tt id="link-32" class="py-name"><a title="antaresia.management.elsewhere.ssh.SSHSession.protocol" class="py-name" href="#" onclick="return doclink('link-32', 'protocol', 'link-22');">protocol</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L72"></a><tt class="py-lineno">72</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">shell</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt id="link-33" class="py-name"><a title="antaresia.management.elsewhere.exceptions" class="py-name" href="#" onclick="return doclink('link-33', 'exceptions', 'link-2');">exceptions</a></tt><tt class="py-op">.</tt><tt id="link-34" class="py-name" targets="Class antaresia.management.elsewhere.exceptions.TransactionRevertError=antaresia.management.elsewhere.exceptions.TransactionRevertError-class.html"><a title="antaresia.management.elsewhere.exceptions.TransactionRevertError" class="py-name" href="#" onclick="return doclink('link-34', 'TransactionRevertError', 'link-34');">TransactionRevertError</a></tt><tt class="py-op">(</tt><tt class="py-string">"The %s action could not revert, it requires an ssh session, which wasn't found."</tt><tt class="py-op">%</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">meta</tt><tt class="py-op">.</tt><tt class="py-name">action_name</tt><tt class="py-op">)</tt> </tt>
+<a name="L73"></a><tt class="py-lineno">73</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-35" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-35', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"rm -rf "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">+</tt><tt class="py-string">"/*"</tt><tt class="py-op">)</tt> </tt>
+<a name="L74"></a><tt class="py-lineno">74</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-36" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-36', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"mv -f "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpcopy</tt><tt class="py-op">+</tt><tt class="py-string">"/* "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">serverdir</tt><tt class="py-op">)</tt> </tt>
+</div><a name="L75"></a><tt class="py-lineno">75</tt>  <tt class="py-line">         </tt>
+<a name="SCPPushAction.finalize"></a><div id="SCPPushAction.finalize-def"><a name="L76"></a><tt class="py-lineno">76</tt> <a class="py-toggle" href="#" id="SCPPushAction.finalize-toggle" onclick="return toggle('SCPPushAction.finalize');">-</a><tt class="py-line">        <tt class="py-keyword">def</tt> <a class="py-def-name" href="antaresia.management.elsewhere.scp.SCPPushAction-class.html#finalize">finalize</a><tt class="py-op">(</tt><tt class="py-param">self</tt><tt class="py-op">)</tt><tt class="py-op">:</tt> </tt>
+</div><div id="SCPPushAction.finalize-collapsed" style="display:none;" pad="++" indent="++++++++++++"></div><div id="SCPPushAction.finalize-expanded"><a name="L77"></a><tt class="py-lineno">77</tt>  <tt class="py-line">                <tt class="py-docstring">"""</tt> </tt>
+<a name="L78"></a><tt class="py-lineno">78</tt>  <tt class="py-line"><tt class="py-docstring">                Finalize the scp push. This is probably one of the</tt> </tt>
+<a name="L79"></a><tt class="py-lineno">79</tt>  <tt class="py-line"><tt class="py-docstring">                only cases where this is needed. It's needed because</tt> </tt>
+<a name="L80"></a><tt class="py-lineno">80</tt>  <tt class="py-line"><tt class="py-docstring">                the tmp copy on the server can't be deleted until at</tt> </tt>
+<a name="L81"></a><tt class="py-lineno">81</tt>  <tt class="py-line"><tt class="py-docstring">                least all actions are done OR transactions have been</tt> </tt>
+<a name="L82"></a><tt class="py-lineno">82</tt>  <tt class="py-line"><tt class="py-docstring">                rolled back. Then this finalize method will delete</tt> </tt>
+<a name="L83"></a><tt class="py-lineno">83</tt>  <tt class="py-line"><tt class="py-docstring">                the tmp copy on the server.</tt> </tt>
+<a name="L84"></a><tt class="py-lineno">84</tt>  <tt class="py-line"><tt class="py-docstring">                """</tt> </tt>
+<a name="L85"></a><tt class="py-lineno">85</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">=</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt id="link-37" class="py-name"><a title="antaresia.management.elsewhere.base.BaseAction.get_logged_in_client" class="py-name" href="#" onclick="return doclink('link-37', 'get_logged_in_client', 'link-19');">get_logged_in_client</a></tt><tt class="py-op">(</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">servername</tt><tt class="py-op">,</tt><tt id="link-38" class="py-name"><a title="antaresia.management.elsewhere.ssh" class="py-name" href="#" onclick="return doclink('link-38', 'ssh', 'link-0');">ssh</a></tt><tt class="py-op">.</tt><tt id="link-39" class="py-name"><a title="antaresia.management.elsewhere.ssh.SSHSession" class="py-name" href="#" onclick="return doclink('link-39', 'SSHSession', 'link-21');">SSHSession</a></tt><tt class="py-op">.</tt><tt id="link-40" class="py-name"><a title="antaresia.management.elsewhere.ssh.SSHSession.protocol" class="py-name" href="#" onclick="return doclink('link-40', 'protocol', 'link-22');">protocol</a></tt><tt class="py-op">)</tt> </tt>
+<a name="L86"></a><tt class="py-lineno">86</tt>  <tt class="py-line">                <tt class="py-keyword">if</tt> <tt class="py-keyword">not</tt> <tt class="py-name">shell</tt><tt class="py-op">:</tt> <tt class="py-keyword">raise</tt> <tt id="link-41" class="py-name"><a title="antaresia.management.elsewhere.exceptions" class="py-name" href="#" onclick="return doclink('link-41', 'exceptions', 'link-2');">exceptions</a></tt><tt class="py-op">.</tt><tt id="link-42" class="py-name"><a title="antaresia.management.elsewhere.exceptions.TransactionRevertError" class="py-name" href="#" onclick="return doclink('link-42', 'TransactionRevertError', 'link-34');">TransactionRevertError</a></tt><tt class="py-op">(</tt><tt class="py-string">"The %s action could not finalize, it requires an ssh session which wasn't found."</tt><tt class="py-op">%</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">meta</tt><tt class="py-op">.</tt><tt class="py-name">action_name</tt><tt class="py-op">)</tt> </tt>
+<a name="L87"></a><tt class="py-lineno">87</tt>  <tt class="py-line">                <tt class="py-name">shell</tt><tt class="py-op">.</tt><tt id="link-43" class="py-name"><a title="antaresia.management.elsewhere.apache.BaseApacheAction.command
+antaresia.management.elsewhere.ssh.SSHSession.command" class="py-name" href="#" onclick="return doclink('link-43', 'command', 'link-23');">command</a></tt><tt class="py-op">(</tt><tt class="py-string">"rm -rf "</tt><tt class="py-op">+</tt><tt class="py-name">self</tt><tt class="py-op">.</tt><tt class="py-name">tmpcopy</tt><tt class="py-op">)</tt> </tt>
+</div></div><a name="L88"></a><tt class="py-lineno">88</tt>  <tt class="py-line"> </tt><script type="text/javascript">
+<!--
+expandto(location.href);
+// -->
+</script>
+</pre>
+<br />
+<!-- ==================== NAVIGATION BAR ==================== -->
+<table class="navbar" border="0" width="100%" cellpadding="0"
+       bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="middle">
+  <!-- Home link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="antaresia.management.elsewhere-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Tree link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="module-tree.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Index link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="identifier-index.html">Indices</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Help link -->
+      <th>&nbsp;&nbsp;&nbsp;<a
+        href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+
+  <!-- Project homepage -->
+      <th class="navbar" align="right" width="100%">
+        <table border="0" cellpadding="0" cellspacing="0">
+          <tr><th class="navbar" align="center"
+            >Elswhere</th>
+          </tr></table></th>
+  </tr>
+</table>
+<table border="0" cellpadding="0" cellspacing="0" width="100%%">
+  <tr>
+    <td align="left" class="footer">
+    Generated by Epydoc 3.0.1 on Tue Jun  9 00:16:26 2009
+    </td>
+    <td align="right" class="footer">
+      <a target="mainFrame" href="http://epydoc.sourceforge.net"
+        >http://epydoc.sourceforge.net</a>
+    </td>
+  </tr>
+</table>
+
+<script type="text/javascript">
+  <!--
+  // Private objects are initially displayed (because if
+  // javascript is turned off then we want them to be
+  // visible); but by default, we want to hide them.  So hide
+  // them unless we have a cookie that says to show them.
+  checkCookie();
+  // -->
+</script>
+</body>
+</html>

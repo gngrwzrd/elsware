@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>TEST &mdash; Elswhere v0.1 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '0.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Elswhere v0.1 documentation" href="" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="">Elswhere v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="test">
+<h1>TEST<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="welcome">
+<h2>Welcome<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h2>
+<p>Elsware is a simple, yet robust deployment scripting tool with transaction support. It&#8217;s focus is to make sure you can write re-usable snippets (actions) that you can piece together, which forms the entire deployment process.</p>
+<p>Inspiration is taken from projects like lighttpd, nginx, and cherokee to create configurations that describe the actions to run, the order, whether or not transactions should kick in, and providing other lookup information for servers, repository information, and custom parameters for each action.</p>
+<p>Instead of writing entire deployment scripts over and over for each project. You write actions that are repeatable, based off of parameters you can define in the configuration. For example, some of the default actions that are included are: ssh login, ssh logout, git repo update, svn repo update, scp push, ftp push and a few others, but their parameters come from a python dictionary - which is essentially a configuration.</p>
+<p>The included actions include transaction rollback support, but actions you write just hook into the correct methods, which gives you all the logic you need to support transactions.</p>
+</div>
+<div class="section" id="what-are-transactions">
+<h2>What are Transactions?<a class="headerlink" href="#what-are-transactions" title="Permalink to this headline">¶</a></h2>
+<p>Transaction just means all or nothing. So if one action in the action list fails, all the actions before it have an opportunity to revert what they just did.</p>
+</div>
+<div class="section" id="how-it-works">
+<h2>How it Works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
+<p>First, let&#8217;s look at an example of a configuration file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">CONFIGURATION</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">&#39;servers&#39;</span><span class="p">:{</span>
+                <span class="s">&#39;admin@slicehost&#39;</span><span class="p">:{</span>
+                        <span class="s">&#39;ip&#39;</span><span class="p">:</span><span class="s">&#39;1.1.1.10&#39;</span><span class="p">,</span>
+                        <span class="s">&#39;user&#39;</span><span class="p">:</span><span class="s">&#39;admin&#39;</span><span class="p">,</span>
+                        <span class="s">&#39;apache&#39;</span><span class="p">:{</span>
+                                <span class="s">&#39;apachectl&#39;</span><span class="p">:</span><span class="s">&#39;/usr/sbin/apachectl&#39;</span><span class="p">,</span>
+                                <span class="s">&#39;sudo&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
+                                <span class="c">#optional, there are ways to pass the password</span>
+                                <span class="c">#through keyword arguments instead.</span>
+                                <span class="s">&#39;password&#39;</span><span class="p">:</span><span class="s">&#39;wordup&#39;</span><span class="p">,</span>
+                        <span class="p">},</span>
+                <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&#39;repos&#39;</span><span class="p">:{</span>
+                <span class="s">&#39;dilla@googlecode&#39;</span><span class="p">:{</span>
+                        <span class="s">&#39;url&#39;</span><span class="p">:</span><span class="s">&#39;http://code.google.com/p/dilla&#39;</span>
+                <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s">&#39;slicehost&#39;</span><span class="p">:{</span>
+                <span class="s">&#39;actions&#39;</span><span class="p">:(</span>
+                                <span class="p">{</span><span class="s">&#39;transaction&#39;</span><span class="p">:(</span><span class="s">&#39;login&#39;</span><span class="p">,</span><span class="s">&#39;update&#39;</span><span class="p">,</span><span class="s">&#39;logout&#39;</span><span class="p">)}</span>
+                <span class="p">),</span>
+                <span class="s">&#39;login&#39;</span><span class="p">:{</span>
+                        <span class="s">&#39;action_class&#39;</span><span class="p">:</span><span class="s">&#39;ssh_login&#39;</span><span class="p">,</span>
+                        <span class="s">&#39;server&#39;</span><span class="p">:</span><span class="s">&#39;admin@slicehost&#39;</span>
+                <span class="p">},</span>
+                <span class="s">&#39;logout&#39;</span><span class="p">:{</span>
+                        <span class="s">&#39;action_class&#39;</span><span class="p">:</span><span class="s">&#39;ssh_logout&#39;</span>
+                <span class="p">},</span>
+                <span class="s">&#39;update&#39;</span><span class="p">:({</span>
+                        <span class="s">&#39;action_class&#39;</span><span class="p">:</span><span class="s">&#39;git_update&#39;</span><span class="p">,</span>
+                        <span class="s">&#39;server&#39;</span><span class="p">:</span><span class="s">&#39;admin@slicehost&#39;</span><span class="p">,</span>
+                        <span class="s">&#39;dir&#39;</span><span class="p">:</span><span class="s">&#39;/var/www/vhosts/deployments/dtesting&#39;</span><span class="p">,</span>
+                <span class="p">})</span>
+        <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Contents:</p>
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference external" href="modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference external" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p><tt class="docutils literal"><span class="pre">self.deployment.messages.run_exception(test)</span></tt></p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="">TEST</a><ul>
+<li><a class="reference external" href="#welcome">Welcome</a></li>
+<li><a class="reference external" href="#what-are-transactions">What are Transactions?</a></li>
+<li><a class="reference external" href="#how-it-works">How it Works</a><ul>
+</ul>
+</li>
+<li><a class="reference external" href="#indices-and-tables">Indices and tables</a></li>
+<li><a class="reference external" href="#introduction">Introduction</a></li>
+</ul>
+</li>
+</ul>
+
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="">Elswhere v0.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2009, Aaron Smith.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.1.
+    </div>
+  </body>
+</html>
