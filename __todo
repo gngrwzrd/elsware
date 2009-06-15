@@ -1,6 +1,7 @@
+#organize common errors into ActionErrors class
+#django stuff for fcgi
 #scp push zip action
 #todos in scp action
-#django stuff for fcgi
 #ftp actions
 #sql actions
 #sphinx docs

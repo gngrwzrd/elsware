@@ -12,14 +12,15 @@ class ActionErrors(object):
 	Re-usable error messages that are common to some actions.
 	"""
 	
-	class_not_found="The class for action '%s' was not found. No actions have run."
-	constructor_argument_error="The class being instantiated for action '%s' does not accept the right parameters. No actions ran. Exiting."
+	action_class_not_found="The class for action '%s' was not found. No actions have run."
+	constructor_argument_error="The class being instantiated for action '%s' does not accept the right parameters, no actions ran."
 	could_not_revert="Transactions could not be reverted, an exception was raised in one of the action revert methods."
-	missing_credentials="A user name and ip address are required to login to %s"
-	missing_server_key="The parameters for action '%s' is missing the 'server' key"
+	missing_credentials="A user name and ip address are required to login to '%s'."
+	missing_server_key="A 'server' key is required in the action parameters for '%s'."
+	missing_ssh_session="A logged in ssh session is required for action '%s'."
 	missing_password="A password is required for the action '%s' and it wasn't found anywhere."
-	transaction_incorrect="The action you wrapped in a dictionary is incorrectly formed, it must contain a 'transaction' key with a list of actions."
 	server_info_not_found="The server information for server '%s' was not found."
+	transaction_incorrect="The action you wrapped in a dictionary is incorrectly formed, it must contain a 'transaction' key with a list of actions."
 	
 class ActionRunner(object):
 	"""
@@ -81,7 +82,7 @@ class ActionRunner(object):
 					actions_clss=action_clss_val
 				else:
 					actions_clss=ActionClasses.lookup.get(action,False)
-				if not actions_clss: raise exceptions.ActionNotAvailable(ActionErrors.class_not_found % action)
+				if not actions_clss: raise exceptions.ActionNotAvailable(ActionErrors.action_class_not_found % action)
 				try:
 					action_instance=actions_clss(self.deployment,action_info)
 					action_instance.transaction=self.transaction
@@ -151,7 +152,6 @@ class RaiseExceptionAction(base.BaseAction):
 register_action_class('apache_stop',servers.ApacheStopAction)
 register_action_class('apache_start',servers.ApacheStartAction)
 register_action_class('apache_restart',servers.ApacheRestartAction)
-register_action_class('email_admins',django_actions.EmailAdminsAction)
 register_action_class('exception',RaiseExceptionAction)
 register_action_class('git_update',scm.GitUpdateAction)
 register_action_class('request',http.HttpRequestAction)
@@ -160,3 +160,7 @@ register_action_class('stdout',messaging.StdoutAction)
 register_action_class('ssh_login',ssh.SSHLoginAction)
 register_action_class('ssh_logout',ssh.SSHLogoutAction)
 register_action_class('svn_update',scm.SvnUpdateAction)
+try:
+	register_action_class('email_admins',django_actions.EmailAdminsAction)
+except ImportError:
+	pass

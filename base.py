@@ -61,7 +61,7 @@ class BaseAction(object):
 		raise if not found.
 		"""
 		servername=self.action_info.get("server",False)
-		if not servername and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_server_key%self.meta.action_name)
+		if not servername and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_server_key % self.meta.action_name)
 		return servername
 	
 	def get_server_info(self,raise_if_not_found=False):
@@ -71,7 +71,7 @@ class BaseAction(object):
 		"""
 		servername=self.get_server_name(True)
 		serverinfo=self.deployment.helper.get_server_info_hash_for_server(servername)
-		if not serverinfo and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.server_info_not_found%servername)
+		if not serverinfo and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.server_info_not_found % servername)
 		return serverinfo
 	
 	def get_ip_and_user(self,raise_if_not_found=False):
@@ -83,7 +83,7 @@ class BaseAction(object):
 		serverinfo=self.get_server_info(True)
 		ip=serverinfo.get("ip",False)
 		user=serverinfo.get("user",False)
-		if not ip or not user: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_credentials%self.get_server_name())
+		if not ip or not user and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_credentials % self.get_server_name())
 		return (ip,user)
 
 	def get_logged_in_client(self,server_name,protocol):

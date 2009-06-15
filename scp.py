@@ -1,17 +1,20 @@
 import pexpect
-import ssh,base,exceptions
+import ssh,base,exceptions,actions
 
 class SCPErrors(base.BaseAction):
 	"""
 	Errors for scp actions
 	"""
 	
-	missing_ssh="The SCPPush action could not revert, it requires an ssh session, which wasn't found."
+	mkdir_permission_denied="Permission was denied to make the target server directory."
+	missing_serverdir_key="The action %s requires a 'serverdir' key in the action parameters."
+	missing_localdir_key="The action %s requires a 'localdir' key in the action parameters."
+	password_required="The action %s requires a password, which could not be found in any of the configuration."
 
 class SCPPushZippedAction(base.BaseAction):
 	"""
 	This action works the same way as the SCP
-	push action, except that it pushes everything
+	push action, except that it first wraps everything
 	up in a zip file, and then unzips it on the
 	server.
 	"""
@@ -20,10 +23,52 @@ class SCPPushZippedAction(base.BaseAction):
 		self.meta.action_name="SCPPushZippedAction"
 	
 	def validate(self):
-		pass
+		self.servername=self.get_server_name(True)
+		self.serverinfo=self.get_server_info(True)
+		self.localdir=self.action_info.get("localdir",False)
+		self.serverdir=self.action_info.get("serverdir",False)
+		if not self.serverdir: raise exceptions.ActionRequirementsError(SCPErrors.missing_serverdir_key % self.meta.action_name)
+		if not self.localdir: raise exceptions.ActionRequirementsError(SCPErrors.missing_localdir_key % self.meta.action_name)
+		self.ip,self.user=self.get_ip_and_user(True)
+		self.password=self.get_password(self.serverinfo,self.action_info,self.deployment.options)
+		if not self.password: self.password=self.get_password_in_opt(self.serverinfo,self.action_info)
+		if not self.password: raise exceptions.ActionRequirementsError(SCPErrors.password_required % self.meta.action_name)
 	
 	def run(self):
-		pass
+		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
+		if not shell: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_ssh_session % self.meta.action_name)
+		splits=self.serverdir.split("/")
+		if not splits[-1] or splits[-1]=="":splits.pop()
+		splits.pop()
+		self.targetdir="/".join(splits)
+		self.tmpcopy=self.targetdir+"/__tmp__"
+		
+		localsplits=self.localdir.split("/")
+		if not localsplits[-1] or localsplits[-1]=="":splits.pop()
+		localsplits.pop()
+		local_zip_output_dir="/".join(localsplits)
+		zipfile=local_zip_output_dir+"__tmp__.zip";
+		
+		
+		#zip up dir
+		zchild=pexpect.spawn("zip -r "+zipfile+" "+self.localdir)
+		
+		#update server dirs
+		shell.command("mkdir -p "+self.serverdir)
+		shell.command("cd "+self.targetdir)
+		shell.command("mkdir -p __tmp__")
+		shell.command("cp -Rf "+self.serverdir+"/* "+"./__tmp__/")
+		shell.command("rm -rf "+self.serverdir+"/*")
+		#push zip file to server.
+		child=pexpect.spawn("scp -r -q "+zipfile+" "+self.user+"@"+self.ip+":"+self.targetdir)
+		child.expect('.ssword:*')
+		child.sendline(self.password)
+		child.interact()
+		
+		#unzip file on server, and mv to target server dir.
+		
+		#remote local __tmp__ file.
+		rchild=pexpect.spawn("rm -rf "+zipfile)
 	
 	def revert(self):
 		pass
@@ -53,10 +98,7 @@ class SCPPushAction(base.BaseAction):
 	the ssh session, and deletes the tmp folder.
 	"""
 	
-	mkdir_permission_denied="Permission was denied to make the target server directory."
-	missing_serverdir_key="SCP push action requires a 'serverdir' key in the action parameters."
-	missing_localdir_key="SCP push action requires a 'localdir' key in the action parameters."
-	password_required="The SC push action requires a password, which could not be found in any of the configuration."
+	
 	
 	def setup(self):
 		self.meta.action_name="SCPPushAction"
@@ -66,16 +108,16 @@ class SCPPushAction(base.BaseAction):
 		self.serverinfo=self.get_server_info(True)
 		self.localdir=self.action_info.get("localdir",False)
 		self.serverdir=self.action_info.get("serverdir",False)
-		if not self.serverdir: raise exceptions.ActionRequirementsError(self.missing_serverdir_key)
-		if not self.localdir: raise exceptions.ActionRequirementsError(self.missing_localdir_key)
+		if not self.serverdir: raise exceptions.ActionRequirementsError(SCPErrors.missing_serverdir_key%self.meta.action_name)
+		if not self.localdir: raise exceptions.ActionRequirementsError(SCPErrors.missing_localdir_key%self.meta.action_name)
 		self.ip,self.user=self.get_ip_and_user(True)
 		self.password=self.get_password(self.serverinfo,self.action_info,self.deployment.options)
 		if not self.password: self.password=self.get_password_in_opt(self.serverinfo,self.action_info)
-		if not self.password: raise exceptions.ActionRequirementsError(self.password_required)
+		if not self.password: raise exceptions.ActionRequirementsError(SCPErrors.password_required%self.meta.action_name)
 	
 	def run(self):
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		if not shell: raise exceptions.ActionRequirementsError(SCPErrors.missing_ssh)
+		if not shell: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_ssh_session % self.meta.action_name)
 		splits=self.serverdir.split("/")
 		if not splits[-1] or splits[-1]=="":splits.pop()
 		splits.pop()
@@ -99,7 +141,7 @@ class SCPPushAction(base.BaseAction):
 	
 	def revert(self):
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		if not shell: raise exceptions.TransactionRevertError(SCPErrors.missing_ssh)
+		if not shell: raise exceptions.TransactionRevertError(actions.ActionErrors.missing_ssh_session % self.meta.action_name)
 		shell.command("rm -rf "+self.serverdir+"/*")
 		shell.command("mv -f "+self.tmpcopy+"/* "+self.serverdir)
 	
@@ -113,5 +155,5 @@ class SCPPushAction(base.BaseAction):
 		the tmp copy on the server.
 		"""
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		if not shell: raise exceptions.ActionError(SCPErrors.missing_ssh)
+		if not shell: raise exceptions.ActionError(actions.ActionErrors.missing_ssh_session % self.meta.action_name)
 		shell.command("rm -rf "+self.tmpcopy)

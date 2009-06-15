@@ -1,6 +1,9 @@
 import pxssh
 import base,exceptions,actions
 
+class SSHErrors(object):
+	error_connecting="Error connecting ssh session %s@%s using password: %s"
+
 class SSHLoginAction(base.BaseAction):
 	"""
 	Logs a user into an ssh session. It stores
@@ -23,19 +26,16 @@ class SSHLoginAction(base.BaseAction):
 		self.ip,self.user=self.get_ip_and_user(True)
 		self.password=self.get_password(self.serverinfo,self.action_info,self.deployment.options)
 		if not self.password: self.password=self.get_password_in_opt(self.serverinfo,self.action_info)
-		if not self.password: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_password%self.meta.action_name)
+		if not self.password: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_password % self.meta.action_name)
 	
 	def run(self):
 		shell=SSHSession()
 		try: shell.login(self.ip,self.user,self.password)
-		except pxssh.ExceptionPxssh: raise exceptions.ActionError("Error connecting ssh session "+self.user+"@"+self.ip+" using password: "+self.password)
+		except pxssh.ExceptionPxssh: raise exceptions.ActionError(SSHErrors.error_connecting % self.user, self.ip, self.password)
 		self.deployment.clients.ssh=shell
 		self.deployment.clients.set_client(self.servername,SSHSession.protocol,shell)
 	
 	def revert(self):
-		"""
-		Revert login action by logging out.
-		"""
 		try:
 			SSHLogoutAction(self.deployment,self.action_info).run()
 		except Exception:
@@ -69,9 +69,6 @@ class SSHLogoutAction(base.BaseAction):
 		shell.session.logout()
 	
 	def revert(self):
-		"""
-		Log back in for transaction reverse
-		"""
 		SSHLoginAction(self.deployment,self.action_info).run()
 
 class SSHSession():
