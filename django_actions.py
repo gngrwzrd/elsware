@@ -53,6 +53,6 @@ class EmailAdminsAction(base.BaseAction):
 			for message in self.deployment.messages.run_exceptions: body+=str(message)
 			body+="\n"
 		if len(self.deployment.messages.revert_exceptions)>0:
-			body+="----REVERT EXCAPTIONS----\n"
+			body+="----REVERT EXCEPTIONS----\n"
 			for message in self.deployment.messages.revert_exceptions: body+=str(message)
 		mail_admins(self.subject,body)

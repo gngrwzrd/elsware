@@ -1,13 +1,64 @@
 import base,ssh,exceptions,actions
 
+class ServerErrors(object):
+	missing_password = "Action %s Missing password"
+
 class RestartFcgi(base.BaseAction):
 	pass
 
-class BaseLighttpd(base.BaseAction):
-	pass
+class LighttpdErrors(object):
+	missing_lighttpdbin = "The Lighttpd action requires the 'lighttpd' key"
+	missing_conf="The lighttpd action requires the 'conf' key"
 
-class RestartLighttpd(BaseLighttpd):
-	pass
+class BaseLighttpdAction(base.BaseAction):
+	def setup(self):
+		self.meta.action_name="BaseLighttpd"
+	
+	def validate(self):
+		self.servername=self.get_server_name(True)
+		self.serverinfo=self.get_server_info(True)
+		self.lighttpdinfo=self.serverinfo.get("ligghttpd",False)
+		self.lighttpdbin=self.lighttpdinfo.get("lighttpdbin",False)
+		self.lighttpdconf=self.lighttpdinfo.get("conf",False)
+		if not self.lighttpdconf: raise exceptions.ActionRequirementsError(LighttpdErrors.missing_conf)
+		if not self.lighttdbin: raise exceptions.ActionRequirementsError(LighttpdErrors.missing_lighttpdbin)
+		self.sudo=self.lighttpdinfo.get("sudo",False)
+		if self.sudo:
+			self.password=self.get_password(self.lighttpdinfo,self.serverinfo,self.action_info)
+			if not self.password: self.password=self.get_password_in_opt(self.lighttpdinfo,self.serverinfo,self.action_info)
+			if not self.password: raise exceptions.ActionRequirementsError(ServerErrors.missing_server % self.meta.action_name)
+	
+	def watch_shell(self):
+		pass
+	
+	def watch_shell_sudo(self):
+		pass
+	
+	def command(self,command,sudo):
+		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
+		if sudo:
+			shell.command("sudo "+self.lighttdbin+" "+command)
+			self.watch_shell_sudo()
+		else:
+			shell.command(self.lighttpdbin+" "+command)
+
+class RestartLighttpdAction(BaseLighttpdAction):
+	def setup(self):
+		self.meta.action_name="RestartLighttpdAction"
+	def run(self):
+		self.command("restart",self.sudo)
+
+class StopLighttpdAction(BaseLighttpdAction):
+	def setup(self):
+		self.meta.action_name="StopLighttpdAction"
+	def run(self):
+		self.command("stop",self.sudo)
+
+class StartLighttpdAction(BaseLighttpdAction):
+	def setup(self):
+		self.meta.action_name="StartLighttpdAction"
+	def run(self):
+		self.command("start",self.sudo)
 
 class BaseNginx(base.BaseAction):
 	pass

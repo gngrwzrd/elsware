@@ -98,8 +98,6 @@ class SCPPushAction(base.BaseAction):
 	the ssh session, and deletes the tmp folder.
 	"""
 	
-	
-	
 	def setup(self):
 		self.meta.action_name="SCPPushAction"
 	
