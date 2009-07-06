@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>TEST &mdash; Elswhere v0.1 documentation</title>
+    <title>Elsware - Scripted Project Deployment &mdash; Elswhere v0.1 documentation</title>
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -19,7 +19,8 @@
     </script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Elswhere v0.1 documentation" href="" /> 
+    <link rel="top" title="Elswhere v0.1 documentation" href="" />
+    <link rel="next" title="1. Introduction" href="introduction.html" /> 
   </head>
   <body>
     <div class="related">
@@ -28,6 +29,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="introduction.html" title="1. Introduction"
+             accesskey="N">next</a> |</li>
         <li><a href="">Elswhere v0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>  
@@ -37,77 +41,126 @@
         <div class="bodywrapper">
           <div class="body">
             
-  <div class="section" id="test">
-<h1>TEST<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="welcome">
-<h2>Welcome<a class="headerlink" href="#welcome" title="Permalink to this headline">¶</a></h2>
-<p>Elsware is a simple, yet robust deployment scripting tool with transaction support. It&#8217;s focus is to make sure you can write re-usable snippets (actions) that you can piece together, which forms the entire deployment process.</p>
-<p>Inspiration is taken from projects like lighttpd, nginx, and cherokee to create configurations that describe the actions to run, the order, whether or not transactions should kick in, and providing other lookup information for servers, repository information, and custom parameters for each action.</p>
-<p>Instead of writing entire deployment scripts over and over for each project. You write actions that are repeatable, based off of parameters you can define in the configuration. For example, some of the default actions that are included are: ssh login, ssh logout, git repo update, svn repo update, scp push, ftp push and a few others, but their parameters come from a python dictionary - which is essentially a configuration.</p>
-<p>The included actions include transaction rollback support, but actions you write just hook into the correct methods, which gives you all the logic you need to support transactions.</p>
-</div>
-<div class="section" id="what-are-transactions">
-<h2>What are Transactions?<a class="headerlink" href="#what-are-transactions" title="Permalink to this headline">¶</a></h2>
-<p>Transaction just means all or nothing. So if one action in the action list fails, all the actions before it have an opportunity to revert what they just did.</p>
-</div>
-<div class="section" id="how-it-works">
-<h2>How it Works<a class="headerlink" href="#how-it-works" title="Permalink to this headline">¶</a></h2>
-<p>First, let&#8217;s look at an example of a configuration file:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">CONFIGURATION</span><span class="o">=</span><span class="p">{</span>
-        <span class="s">&#39;servers&#39;</span><span class="p">:{</span>
-                <span class="s">&#39;admin@slicehost&#39;</span><span class="p">:{</span>
-                        <span class="s">&#39;ip&#39;</span><span class="p">:</span><span class="s">&#39;1.1.1.10&#39;</span><span class="p">,</span>
-                        <span class="s">&#39;user&#39;</span><span class="p">:</span><span class="s">&#39;admin&#39;</span><span class="p">,</span>
-                        <span class="s">&#39;apache&#39;</span><span class="p">:{</span>
-                                <span class="s">&#39;apachectl&#39;</span><span class="p">:</span><span class="s">&#39;/usr/sbin/apachectl&#39;</span><span class="p">,</span>
-                                <span class="s">&#39;sudo&#39;</span><span class="p">:</span><span class="bp">True</span><span class="p">,</span>
-                                <span class="c">#optional, there are ways to pass the password</span>
-                                <span class="c">#through keyword arguments instead.</span>
-                                <span class="s">&#39;password&#39;</span><span class="p">:</span><span class="s">&#39;wordup&#39;</span><span class="p">,</span>
-                        <span class="p">},</span>
-                <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="s">&#39;repos&#39;</span><span class="p">:{</span>
-                <span class="s">&#39;dilla@googlecode&#39;</span><span class="p">:{</span>
-                        <span class="s">&#39;url&#39;</span><span class="p">:</span><span class="s">&#39;http://code.google.com/p/dilla&#39;</span>
-                <span class="p">}</span>
-        <span class="p">},</span>
-        <span class="s">&#39;slicehost&#39;</span><span class="p">:{</span>
-                <span class="s">&#39;actions&#39;</span><span class="p">:(</span>
-                                <span class="p">{</span><span class="s">&#39;transaction&#39;</span><span class="p">:(</span><span class="s">&#39;login&#39;</span><span class="p">,</span><span class="s">&#39;update&#39;</span><span class="p">,</span><span class="s">&#39;logout&#39;</span><span class="p">)}</span>
-                <span class="p">),</span>
-                <span class="s">&#39;login&#39;</span><span class="p">:{</span>
-                        <span class="s">&#39;action_class&#39;</span><span class="p">:</span><span class="s">&#39;ssh_login&#39;</span><span class="p">,</span>
-                        <span class="s">&#39;server&#39;</span><span class="p">:</span><span class="s">&#39;admin@slicehost&#39;</span>
-                <span class="p">},</span>
-                <span class="s">&#39;logout&#39;</span><span class="p">:{</span>
-                        <span class="s">&#39;action_class&#39;</span><span class="p">:</span><span class="s">&#39;ssh_logout&#39;</span>
-                <span class="p">},</span>
-                <span class="s">&#39;update&#39;</span><span class="p">:({</span>
-                        <span class="s">&#39;action_class&#39;</span><span class="p">:</span><span class="s">&#39;git_update&#39;</span><span class="p">,</span>
-                        <span class="s">&#39;server&#39;</span><span class="p">:</span><span class="s">&#39;admin@slicehost&#39;</span><span class="p">,</span>
-                        <span class="s">&#39;dir&#39;</span><span class="p">:</span><span class="s">&#39;/var/www/vhosts/deployments/dtesting&#39;</span><span class="p">,</span>
-                <span class="p">})</span>
-        <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-</div>
+  <div class="section" id="elsware-scripted-project-deployment">
+<h1>Elsware - Scripted Project Deployment<a class="headerlink" href="#elsware-scripted-project-deployment" title="Permalink to this headline">¶</a></h1>
 <p>Contents:</p>
-<ul class="simple">
+<ul>
+<li class="toctree-l1"><a class="reference external" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1"><a class="reference external" href="requirements.html">2. Requirements</a></li>
+<li class="toctree-l1"><a class="reference external" href="running.html">3. How it works</a><ul>
+<li class="toctree-l2"><a class="reference external" href="running.html#configuration">3.1. Configuration</a></li>
+<li class="toctree-l2"><a class="reference external" href="running.html#server-information">3.2. Server information</a></li>
+<li class="toctree-l2"><a class="reference external" href="running.html#deployment-instructions">3.3. Deployment Instructions</a></li>
+<li class="toctree-l2"><a class="reference external" href="running.html#action-lists">3.4. Action Lists</a></li>
+<li class="toctree-l2"><a class="reference external" href="running.html#action-parameters">3.5. Action Parameters</a></li>
+<li class="toctree-l2"><a class="reference external" href="running.html#supplying-passwords">3.6. Supplying Passwords</a></li>
 </ul>
-</div>
-<div class="section" id="indices-and-tables">
-<h2>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
-<ul class="simple">
-<li><a class="reference external" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference external" href="modindex.html"><em>Module Index</em></a></li>
-<li><a class="reference external" href="search.html"><em>Search Page</em></a></li>
+</li>
+<li class="toctree-l1"><a class="reference external" href="composing.html">4. Writing Your Own Actions</a><ul>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-baseaction-class">4.1. The BaseAction class</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-init-method">4.2. The __init__ method</a><ul>
+<li class="toctree-l3"><a class="reference external" href="composing.html#the-deployment-parameter">4.2.1. The deployment parameter</a></li>
+<li class="toctree-l3"><a class="reference external" href="composing.html#the-action-info-parameter">4.2.2. The action_info parameter</a></li>
 </ul>
-</div>
-<div class="section" id="introduction">
-<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
-<p><tt class="docutils literal"><span class="pre">self.deployment.messages.run_exception(test)</span></tt></p>
-</div>
+</li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-setup-method">4.3. The setup() method</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-validate-method">4.4. The validate() method</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-run-method">4.5. The run() method</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-revert-method">4.6. The revert() method</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-finalize-method">4.7. The finalize() method</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#the-teardown-method">4.8. The teardown() method</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#registering-your-action-with-elsware">4.9. Registering your action with elsware</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#keeping-actions-re-usable">4.10. Keeping Actions Re-usable</a></li>
+<li class="toctree-l2"><a class="reference external" href="composing.html#advanced-topics">4.11. Advanced topics</a><ul>
+<li class="toctree-l3"><a class="reference external" href="composing.html#helpers-on-base-action-class">4.11.1. Helpers on base action class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="clients.html">5. Saving state with client objects</a><ul>
+<li class="toctree-l2"><a class="reference external" href="clients.html#the-clients-object">5.1. The Clients object</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="messaging.html">6. Acessing messages, exceptions, and tracebacks</a></li>
+<li class="toctree-l1"><a class="reference external" href="defaultactions.html">7. Pre-built Actions</a><ul>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#ssh-login-action">7.1. SSH login action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#action-class-name">7.1.1. Action class name</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#action-parameters">7.1.2. Action parameters</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#transaction-rollback">7.1.3. Transaction rollback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#ssh-logout-action">7.2. SSH logout action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id1">7.2.1. Action class name</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id2">7.2.2. Action parameters</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id3">7.2.3. Transaction rollback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#apache-actions">7.3. Apache Actions</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#running-apachectl-as-sudo">7.3.1. Running Apachectl as Sudo</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#password-searching">7.3.2. Password Searching</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id4">7.3.3. Action parameters</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#apache-restart-action">7.3.4. Apache restart action</a><ul>
+<li class="toctree-l4"><a class="reference external" href="defaultactions.html#id5">7.3.4.1. Action class name</a></li>
+<li class="toctree-l4"><a class="reference external" href="defaultactions.html#id6">7.3.4.2. Transaction rollback</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#apache-stop-action">7.3.5. Apache stop action</a><ul>
+<li class="toctree-l4"><a class="reference external" href="defaultactions.html#id7">7.3.5.1. Action class name</a></li>
+<li class="toctree-l4"><a class="reference external" href="defaultactions.html#id8">7.3.5.2. Transaction rollback</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#apache-start-action">7.3.6. Apache start action</a><ul>
+<li class="toctree-l4"><a class="reference external" href="defaultactions.html#id9">7.3.6.1. Action class name</a></li>
+<li class="toctree-l4"><a class="reference external" href="defaultactions.html#id10">7.3.6.2. Transaction rollback</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#git-update-action">7.4. Git update action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id11">7.4.1. Action class name</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id12">7.4.2. Action parameters</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id13">7.4.3. Transaction rollback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#svn-update-action">7.5. SVN update action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id14">7.5.1. Action class name</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id15">7.5.2. Action parameters</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#force-checkouts">7.5.3. Force checkouts</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#scp-push-action">7.6. SCP push action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id16">7.6.1. Action class name</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id17">7.6.2. Action parameters</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id18">7.6.3. Transaction rollback</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#scp-push-zipped-action">7.7. SCP push zipped action</a></li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#ftp-push-action">7.8. FTP push action</a></li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#email-django-admins">7.9. Email django admins</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id19">7.9.1. Action class name</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id20">7.9.2. Action parameters</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#print-to-stdout-action">7.10. Print to stdout action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id21">7.10.1. Action class name</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#raise-test-exception-action">7.11. Raise test exception action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id22">7.11.1. Action class name</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="defaultactions.html#http-request-action">7.12. HTTP request action</a><ul>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id23">7.12.1. Action class name</a></li>
+<li class="toctree-l3"><a class="reference external" href="defaultactions.html#id24">7.12.2. Action parameters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="django.html">8. Pre-built Django Management Command</a><ul>
+<li class="toctree-l2"><a class="reference external" href="django.html#custom-elsware-actions-for-apps">8.1. Custom elsware actions for apps</a></li>
+</ul>
+</li>
+</ul>
 </div>
 
 
@@ -116,20 +169,9 @@
       </div>
       <div class="sphinxsidebar">
         <div class="sphinxsidebarwrapper">
-            <h3><a href="">Table Of Contents</a></h3>
-            <ul>
-<li><a class="reference external" href="">TEST</a><ul>
-<li><a class="reference external" href="#welcome">Welcome</a></li>
-<li><a class="reference external" href="#what-are-transactions">What are Transactions?</a></li>
-<li><a class="reference external" href="#how-it-works">How it Works</a><ul>
-</ul>
-</li>
-<li><a class="reference external" href="#indices-and-tables">Indices and tables</a></li>
-<li><a class="reference external" href="#introduction">Introduction</a></li>
-</ul>
-</li>
-</ul>
-
+            <h4>Next topic</h4>
+            <p class="topless"><a href="introduction.html"
+                                  title="next chapter">1. Introduction</a></p>
             <h3>This Page</h3>
             <ul class="this-page-menu">
               <li><a href="_sources/index.txt"
@@ -158,6 +200,9 @@
         <li class="right" style="margin-right: 10px">
           <a href="genindex.html" title="General Index"
              >index</a></li>
+        <li class="right" >
+          <a href="introduction.html" title="1. Introduction"
+             >next</a> |</li>
         <li><a href="">Elswhere v0.1 documentation</a> &raquo;</li> 
       </ul>
     </div>

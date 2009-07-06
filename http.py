@@ -17,8 +17,8 @@ class HttpRequestAction(base.BaseAction):
 	proxy mail server restarts.
 	
 	Supported Action Parameters:
-	'ping':{
-		'action_class':'ping',
+	'request':{
+		'action_class':'request',
 		'url':'http://www.google.com/',
 		'data':{}, #sends data post
 	},

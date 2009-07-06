@@ -1,6 +1,7 @@
 #add logic to handle localhost for client
 #django stuff for fcgi
 #sql actions
+#organize common errors into ActionErrors class
 #scp push zip action
 #todos in scp action
 #ftp actions

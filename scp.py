@@ -1,12 +1,15 @@
 import pexpect
-import ssh,base,exceptions
+import ssh,base,exceptions,actions
 
 class SCPErrors(base.BaseAction):
 	"""
 	Errors for scp actions
 	"""
 	
-	missing_ssh="The SCPPush action could not revert, it requires an ssh session, which wasn't found."
+	mkdir_permission_denied="Permission was denied to make the target server directory."
+	missing_serverdir_key="The action %s requires a 'serverdir' key in the action parameters."
+	missing_localdir_key="The action %s requires a 'localdir' key in the action parameters."
+	password_required="The action %s requires a password, which could not be found in any of the configuration."
 
 class SCPPushAction(base.BaseAction):
 	"""
@@ -30,11 +33,6 @@ class SCPPushAction(base.BaseAction):
 	the ssh session, and deletes the tmp folder.
 	"""
 	
-	mkdir_permission_denied="Permission was denied to make the target server directory."
-	missing_serverdir_key="SCP push action requires a 'serverdir' key in the action parameters."
-	missing_localdir_key="SCP push action requires a 'localdir' key in the action parameters."
-	password_required="The SC push action requires a password, which could not be found in any of the configuration."
-	
 	def setup(self):
 		self.meta.action_name="SCPPushAction"
 	
@@ -43,16 +41,16 @@ class SCPPushAction(base.BaseAction):
 		self.serverinfo=self.get_server_info(True)
 		self.localdir=self.action_info.get("localdir",False)
 		self.serverdir=self.action_info.get("serverdir",False)
-		if not self.serverdir: raise exceptions.ActionRequirementsError(self.missing_serverdir_key)
-		if not self.localdir: raise exceptions.ActionRequirementsError(self.missing_localdir_key)
+		if not self.serverdir: raise exceptions.ActionRequirementsError(SCPErrors.missing_serverdir_key%self.meta.action_name)
+		if not self.localdir: raise exceptions.ActionRequirementsError(SCPErrors.missing_localdir_key%self.meta.action_name)
 		self.ip,self.user=self.get_ip_and_user(True)
 		self.password=self.get_password(self.serverinfo,self.action_info,self.deployment.options)
 		if not self.password: self.password=self.get_password_in_opt(self.serverinfo,self.action_info)
-		if not self.password: raise exceptions.ActionRequirementsError(self.password_required)
+		if not self.password: raise exceptions.ActionRequirementsError(SCPErrors.password_required%self.meta.action_name)
 	
 	def run(self):
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		if not shell: raise exceptions.ActionRequirementsError(SCPErrors.missing_ssh)
+		if not shell: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_ssh_session % self.meta.action_name)
 		splits=self.serverdir.split("/")
 		if not splits[-1] or splits[-1]=="":splits.pop()
 		splits.pop()
@@ -76,7 +74,7 @@ class SCPPushAction(base.BaseAction):
 	
 	def revert(self):
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		if not shell: raise exceptions.TransactionRevertError(SCPErrors.missing_ssh)
+		if not shell: raise exceptions.TransactionRevertError(actions.ActionErrors.missing_ssh_session % self.meta.action_name)
 		shell.command("rm -rf "+self.serverdir+"/*")
 		shell.command("mv -f "+self.tmpcopy+"/* "+self.serverdir)
 	
@@ -90,5 +88,5 @@ class SCPPushAction(base.BaseAction):
 		the tmp copy on the server.
 		"""
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		if not shell: raise exceptions.ActionError(SCPErrors.missing_ssh)
+		if not shell: raise exceptions.ActionError(actions.ActionErrors.missing_ssh_session % self.meta.action_name)
 		shell.command("rm -rf "+self.tmpcopy)

@@ -1,9 +1,10 @@
-import base,ssh,exceptions
+import base,ssh,exceptions,actions
 
 class ServerErrors(object):
 	"""
 	Common server errors
 	"""
+	missing_password = "Action %s Missing password"
 	missing_pidfile="The %s action requires a 'pidfile' parameter"
 	missing_pidfiles="The %s action requires a 'pidfiles' parameter"
 	missing_socket="The %s action requires a 'socket' parameter"
@@ -12,6 +13,7 @@ class ServerErrors(object):
 	missing_socket_and_host="The %s action requires a 'socket' or 'host' parameter"
 	missing_port_with_host="The action %s requires a 'host', and 'port' parameter"
 	missing_conf="The action %s requires a 'conf' parameter"
+
 
 class BaseNginx(base.BaseAction):
 	"""
@@ -45,13 +47,9 @@ class ApacheErrors(object):
 	bind_problem="Apache reported a problem binding to whichever port it's running on."
 	command_not_found="The apachectl command was not found on the server."
 	missing_apachectl="Apache actions require the 'apachectl' key in the apache information for the target server."
-	missing_ssh_session="Apache actions require an ssh session to be logged in."
-	missing_server_key="Apache action require a 'server' key, to control which server to login to and perform the apache action."
 	not_running="The apachectl command reported that apache is not running (httpd pid (XXX?) not running). If apache is running, chances are you need to add sudo into the apache server info hash."
-	password_required="Apache actions that run in sudo require a password, which I couldn't find in any parameters or configurations."
 	permission_denied="The apachectl command reported a permission denied. Chances are you need to run as sudo, or change the permissions for apache."
 	sudo_incorrect="The sudo password used for apachectl was not correct."
-	server_info_not_found="The server information for %s was not found."
 
 class BaseApacheAction(base.BaseAction):
 	"""
@@ -76,7 +74,7 @@ class BaseApacheAction(base.BaseAction):
 		if self.sudo:
 			password=self.get_password(self.apacheinfo,self.serverinfo,self.action_info,self.deployment.options)
 			if not password: password=self.get_password_in_opt(self.apacheinfo,self.serverinfo,self.action_info)
-			if not password: raise exceptions.ActionRequirementsError(ApacheErrors.password_required)
+			if not password: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_password%self.meta.action_name)
 			self.password=password
 
 	def command(self,command,sudo):
@@ -109,7 +107,7 @@ class BaseApacheAction(base.BaseAction):
 
 	def watch_shell(self):
 		"""
-		Re-usable pexpect logic after running any 
+		Re-usable pexpect logic after running any
 		apachectl command
 		"""
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)

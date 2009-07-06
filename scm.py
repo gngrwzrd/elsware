@@ -1,5 +1,5 @@
 import re
-import base,exceptions,ssh
+import base,exceptions,ssh,actions
 
 class GitErrors(object):
 	"""
@@ -59,15 +59,15 @@ class GitUpdateAction(base.BaseAction):
 		#TODO: add expect for when "master" branch isn't setup correctly
 		#TODO: add expect for when the wrong remote is used.. like orign
 		i=shell.expect([shell.permission,shell.cmnf,self.not_a_repo,shell.eof,shell.timeout])
-		if i==0: exception=exceptions.SSHErrorDetected(GitErrors.permission_denied%self.repo_name)
+		if i==0: exception=exceptions.SSHErrorDetected(GitErrors.permission_denied % self.repo_name)
 		elif i==1: exception=exceptions.SSHErrorDetected(GitErrors.git_not_installed)
-		elif i==2: exception=exceptions.SSHErrorDetected(GitErrors.not_a_repo_error%self.dirl)
+		elif i==2: exception=exceptions.SSHErrorDetected(GitErrors.not_a_repo_error % self.dirl)
 		if exception: raise exception
 	
 	def revert(self):
 		if not getattr(self,"before_head",False): raise exceptions.TransactionRevertError(self.no_previous_head)
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		if not shell: raise exceptions.TransactionRevertError(GitErrors.missing_session%self.servername)
+		if not shell: raise exceptions.TransactionRevertError(actions.ActionErrors.missing_ssh_session % self.servername)
 		shell.mk_and_cd(self.dirl)
 		shell.command("git reset --hard -q %s"%self.before_head)
 

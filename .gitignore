@@ -3,3 +3,5 @@
 __MAC
 .project
 .pydevproject
+docs
+docs/**/*

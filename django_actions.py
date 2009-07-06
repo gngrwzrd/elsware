@@ -20,7 +20,7 @@ class EmailErrors(object):
 	missing_email_user="Your django settings module needs to define the EMAIL_USER setting."
 	missing_email_password="Your django settings module needs to define the EMAIL_PASSWORD setting."
 
-class EmailAdminsAction(base.BaseAction):		
+class EmailAdminsAction(base.BaseAction):
 	"""
 	Email all the addresses in settings.ADMINS. It
 	email's them all the messages collected in
@@ -43,7 +43,7 @@ class EmailAdminsAction(base.BaseAction):
 	
 	def finalize(self):
 		if not self.deployment.messages.has_messages(): return
-		body="Errors occurred in '%s' deployment instruction.\n"%self.deployment.helper.get_name()
+		body="Errors occurred in '%s' deployment instruction.\n" % self.deployment.helper.get_name()
 		if len(self.deployment.messages.messages)>0:
 			body+="----MESSAGES----\n"
 			for message in self.deployment.messages.messages: body+=str(message)
@@ -53,7 +53,7 @@ class EmailAdminsAction(base.BaseAction):
 			for message in self.deployment.messages.run_exceptions: body+=str(message)
 			body+="\n"
 		if len(self.deployment.messages.revert_exceptions)>0:
-			body+="----REVERT EXCAPTIONS----\n"
+			body+="----REVERT EXCEPTIONS----\n"
 			for message in self.deployment.messages.revert_exceptions: body+=str(message)
 		mail_admins(self.subject,body)
 

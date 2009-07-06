@@ -61,7 +61,7 @@ class BaseAction(object):
 		raise if not found.
 		"""
 		servername=self.action_info.get("server",False)
-		if not servername and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_server_key%self.meta.action_name)
+		if not servername and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_server_key % self.meta.action_name)
 		return servername
 	
 	def get_server_info(self,raise_if_not_found=False):
@@ -71,7 +71,7 @@ class BaseAction(object):
 		"""
 		servername=self.get_server_name(True)
 		serverinfo=self.deployment.helper.get_server_info_hash_for_server(servername)
-		if not serverinfo and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.server_info_not_found%servername)
+		if not serverinfo and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.server_info_not_found % servername)
 		return serverinfo
 	
 	def get_host_and_user(self,raise_if_not_found=False):
