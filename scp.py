@@ -8,29 +8,6 @@ class SCPErrors(base.BaseAction):
 	
 	missing_ssh="The SCPPush action could not revert, it requires an ssh session, which wasn't found."
 
-class SCPPushZippedAction(base.BaseAction):
-	"""
-	This action works the same way as the SCP
-	push action, except that it pushes everything
-	up in a zip file, and then unzips it on the
-	server.
-	"""
-	
-	def setup(self):
-		self.meta.action_name="SCPPushZippedAction"
-	
-	def validate(self):
-		pass
-	
-	def run(self):
-		pass
-	
-	def revert(self):
-		pass
-	
-	def finalize(self):
-		pass
-
 class SCPPushAction(base.BaseAction):
 	"""
 	The SCP Push action pushes files up to a server

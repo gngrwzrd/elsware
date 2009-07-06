@@ -1,5 +1,11 @@
 import sys,traceback
-import base,ssh,scm,exceptions,servers,scp,messaging,django_actions,http
+import base,ssh,scm,exceptions,servers,scp,messaging,http,pid
+has_django=False
+try:
+	import django_actions
+	has_django=True
+except ImportError:
+	pass
 
 def register_action_class(action_name,clazz):
 	"""
@@ -15,7 +21,7 @@ class ActionErrors(object):
 	class_not_found="The class for action '%s' was not found. No actions have run."
 	constructor_argument_error="The class being instantiated for action '%s' does not accept the right parameters. No actions ran. Exiting."
 	could_not_revert="Transactions could not be reverted, an exception was raised in one of the action revert methods."
-	missing_credentials="A user name and ip address are required to login to %s"
+	missing_credentials="A user name and host are required to login to %s"
 	missing_server_key="The parameters for action '%s' is missing the 'server' key"
 	missing_password="A password is required for the action '%s' and it wasn't found anywhere."
 	transaction_incorrect="The action you wrapped in a dictionary is incorrectly formed, it must contain a 'transaction' key with a list of actions."
@@ -148,15 +154,20 @@ class RaiseExceptionAction(base.BaseAction):
 		raise Exception("Raised an exception for testing.")
 
 #default action registrations
+register_action_class('ssh_login',ssh.SSHLoginAction)
+register_action_class('ssh_logout',ssh.SSHLogoutAction)
 register_action_class('apache_stop',servers.ApacheStopAction)
 register_action_class('apache_start',servers.ApacheStartAction)
 register_action_class('apache_restart',servers.ApacheRestartAction)
-register_action_class('email_admins',django_actions.EmailAdminsAction)
-register_action_class('exception',RaiseExceptionAction)
+#register_action_class("nginx_restart",servers.NginxRestartAction)
+#register_action_class("nginx_restart",servers.NginxStartAction)
 register_action_class('git_update',scm.GitUpdateAction)
-register_action_class('request',http.HttpRequestAction)
+register_action_class("svn_update",scm.SvnUpdateAction)
 register_action_class('scp',scp.SCPPushAction)
+register_action_class('killpid',pid.KillPID)
 register_action_class('stdout',messaging.StdoutAction)
-register_action_class('ssh_login',ssh.SSHLoginAction)
-register_action_class('ssh_logout',ssh.SSHLogoutAction)
-register_action_class('svn_update',scm.SvnUpdateAction)
+register_action_class('request',http.HttpRequestAction)
+register_action_class('exception',RaiseExceptionAction)
+if(has_django):
+	register_action_class('email_admins',django_actions.EmailAdminsAction)
+	register_action_class('django_fcgi_restart',django_actions.RestartDjangoFCGIAction)

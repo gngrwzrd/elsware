@@ -74,17 +74,17 @@ class BaseAction(object):
 		if not serverinfo and raise_if_not_found: raise exceptions.ActionRequirementsError(actions.ActionErrors.server_info_not_found%servername)
 		return serverinfo
 	
-	def get_ip_and_user(self,raise_if_not_found=False):
+	def get_host_and_user(self,raise_if_not_found=False):
 		"""
 		Get the user and ip address from server info,
 		it returns a tuple so you can call it like this:
 		ip, user=self.get_ip_and_user(True)
 		"""
 		serverinfo=self.get_server_info(True)
-		ip=serverinfo.get("ip",False)
+		host=serverinfo.get("host",False)
 		user=serverinfo.get("user",False)
-		if not ip or not user: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_credentials%self.get_server_name())
-		return (ip,user)
+		if not host or not user: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_credentials%self.get_server_name())
+		return (host,user)
 
 	def get_logged_in_client(self,server_name,protocol):
 		"""

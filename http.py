@@ -3,7 +3,7 @@ import base,exceptions
 
 class HttpErrors(object):
 	"""
-	Ping errors for the HttpRequestAction
+	Errors for the HttpRequestAction
 	"""
 	
 	missing_url="The HttpRequestAction action requires a 'url' key."

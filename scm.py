@@ -18,7 +18,7 @@ class GitErrors(object):
 
 class GitUpdateAction(base.BaseAction):
 	"""
-	GIT repo udpate action.
+	GIT repo update action.
 	
 	Supported Action Parameters:
 	'gitupdate':({

@@ -20,15 +20,15 @@ class SSHLoginAction(base.BaseAction):
 	def validate(self):
 		self.servername=self.get_server_name(True)
 		self.serverinfo=self.get_server_info(True)
-		self.ip,self.user=self.get_ip_and_user(True)
+		self.host,self.user=self.get_host_and_user(True)
 		self.password=self.get_password(self.serverinfo,self.action_info,self.deployment.options)
 		if not self.password: self.password=self.get_password_in_opt(self.serverinfo,self.action_info)
 		if not self.password: raise exceptions.ActionRequirementsError(actions.ActionErrors.missing_password%self.meta.action_name)
 	
 	def run(self):
 		shell=SSHSession()
-		try: shell.login(self.ip,self.user,self.password)
-		except pxssh.ExceptionPxssh: raise exceptions.ActionError("Error connecting ssh session "+self.user+"@"+self.ip+" using password: "+self.password)
+		try: shell.login(self.host,self.user,self.password)
+		except pxssh.ExceptionPxssh: raise exceptions.ActionError("Error connecting ssh session "+self.user+"@"+self.host+" using password: "+self.password)
 		self.deployment.clients.ssh=shell
 		self.deployment.clients.set_client(self.servername,SSHSession.protocol,shell)
 	
@@ -99,12 +99,12 @@ class SSHSession():
 		i=self.session.expect(options,timeout=5)
 		return i
 	
-	def login(self,ip,user,password):
+	def login(self,host,user,password):
 		"""
 		Login to the remote computer.
 		"""
 		try:
-			self.session.login(ip,user,password)
+			self.session.login(host,user,password)
 		except pxssh.ExceptionPxssh:
 			raise
 		except pxssh.EOF:
