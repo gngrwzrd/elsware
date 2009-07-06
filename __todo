@@ -1,3 +1,4 @@
+#move all error messages into one file
 #add logic to handle localhost for client
 #django stuff for fcgi
 #sql actions

@@ -16,38 +16,50 @@ DEPLOYMENTS={
 		'localhost':{
 			'host':'127.0.0.1',
 			'user':'aaronsmith',
-			#'password':'smithers',
+			'password_in_opt':'localhost',
 			'django_fcgi':{
-			}
+			},
+			'nginx':{
+				'bin':'/usr/local/sbin/nginx',
+				'conf':'/etc/nginx/nginx.conf',
+				'pidfile':'/var/run/nginx.pid'
+		  }
 		}
 	},
 	
-	'localhost_test':{
+	'localhost_1':{
 		'actions':({
-			'transaction':('login','fcgi_restart','logout')
+			'transaction':('login','nginx_stop','logout')
 		},),
 		'login':{
 			'action_class':'ssh_login',
 			'server':'localhost',
-			'password_in_opt':'localhost',
 		},
 		'logout':{
 			'action_class':'ssh_logout',
 			'server':'localhost',
 		},
-		'fcgi_restart':{
-			'action_class':'django_fcgi_restart',
+		'nginx_stop':{
+			'action_class':'nginx_stop',
 			'server':'localhost',
-			'dir':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo',
-			'ports':(8024,8025,8026),
-			'method':'preforked',
-			'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
-			'host':'127.0.0.1',
-			'maxspare':'5',
-			'minspare':'2',
-			'maxchildren':'45',
-			'maxrequests':'1500',
-			'socket':'/tmp/djang_fcgi.sock',
+		},
+	},
+	
+	'localhost_2':{
+		'actions':({
+			'transaction':('login','nginx_restart','logout')
+		}),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'localhost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'localhost',
+		},
+		'nginx_restart':{
+			'action_class':'nginx_restart',
+			'server':'localhost',
 		},
 	},
 	
@@ -127,4 +139,19 @@ DEPLOYMENTS={
 #	'server':'admin@slicehost',
 #	'url':'http://django-dilla.googlecode.com/svn/trunk/dilla/',
 #	'dir':'/var/www/vhosts/deployments/dilla/'
+#},
+
+#'fcgi_restart':{
+#	'action_class':'django_fcgi_restart',
+#	'server':'localhost',
+#	'dir':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo',
+#	'ports':(8024,8025,8026),
+#	'method':'preforked',
+#	'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
+#	'host':'127.0.0.1',
+#	'maxspare':'5',
+#	'minspare':'2',
+#	'maxchildren':'45',
+#	'maxrequests':'1500',
+#	'socket':'/tmp/djang_fcgi.sock',
 #},
