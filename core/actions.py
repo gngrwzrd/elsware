@@ -154,9 +154,10 @@ register_action_class('killpid',pid.KillPID)
 register_action_class('stdout',messaging.StdoutAction)
 register_action_class('request',http.HttpRequestAction)
 register_action_class('exception',RaiseExceptionAction)
+
 try:
-	from elsware.jango import email as jango_email
-	from elsware.jango import fcgi as jango_fcgi
+	from elsware.django import email as jango_email
+	from elsware.django import fcgi as jango_fcgi
 	register_action_class('email_admins',jango_email.EmailAdminsAction)
 	register_action_class('django_fcgi_restart',jango_fcgi.RestartDjangoFCGIAction)
 except ImportError:

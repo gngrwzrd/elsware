@@ -5,7 +5,7 @@ class DictOption(Option):
 	A parseopt option that let's me define a dictionary through
 	the commandline.
 	
-	Example:
+	optparse example:
 	parser.add_option(DictOption("-p","--passwords",dest="passwords",type="string",action="dic"))
 	
 	Commandline usage:
@@ -13,6 +13,10 @@ class DictOption(Option):
 	
 	Commandline, if spaces are needed:
 	--passwords="[localhost]my Password,[slicehost]Anot erPassword"
+	
+	This would be defined in the final options dictionary as another dictionary:
+	example 1: { 'passwords':{'localhost':'smithers' } }
+	example 2: { 'passwords':{'localhost':'my Password', 'slicehost':'Anot erPassword' } }
 	"""
 	ACTIONS = Option.ACTIONS + ("dic",)
 	STORE_ACTIONS = Option.STORE_ACTIONS + ("dic",)
