@@ -37,10 +37,9 @@ class SCPPushAction(base.BaseAction):
 		self.ip,self.user=self.get_ip_and_user(True)
 		self.password=self.get_password(self.serverinfo,self.action_info,self.deployment.options)
 		if not self.password: self.password=self.get_password_in_opt(self.serverinfo,self.action_info)
-		if not self.password: raise exceptions.ActionRequirementsError(messages.password_required%self.meta.action_name)
+		if not self.password: raise exceptions.ActionRequirementsError(messages.missing_password%self.meta.action_name)
 	
 	def run(self):
-		from core import actions
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
 		if not shell: raise exceptions.ActionRequirementsError(messages.missing_ssh_session % self.meta.action_name)
 		splits=self.serverdir.split("/")
@@ -72,7 +71,6 @@ class SCPPushAction(base.BaseAction):
 		shell.command("mv -f "+self.tmpcopy+"/* "+self.serverdir)
 	
 	def finalize(self):
-		from core import actions
 		"""
 		Finalize the scp push. This is probably one of the
 		only cases where this is needed. It's needed because
