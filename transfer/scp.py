@@ -1,7 +1,6 @@
 import pexpect
-from elsware.core import base
+from elsware.core import base,exceptions,messages
 from elsware.clients import ssh
-from elsware.exsept import exceptions,messages
 
 class SCPPushAction(base.BaseAction):
 	"""

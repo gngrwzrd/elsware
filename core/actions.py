@@ -1,8 +1,7 @@
 import sys,traceback
-import base,messaging,http,pid
+import base,messaging,http,pid,exceptions,messages
 from elsware.clients import ssh
 from elsware.transfer import scp
-from elsware.exsept import exceptions,messages
 from elsware.scm import git,svn
 from elsware.servers import apache
 from elsware.servers import nginx

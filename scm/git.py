@@ -1,6 +1,5 @@
 import re
-from elsware.core import base
-from elsware.exsept import exceptions,messages
+from elsware.core import base,exceptions,messages,pexpects
 from elsware.clients import ssh
 
 class GitUpdateAction(base.BaseAction):
@@ -14,8 +13,6 @@ class GitUpdateAction(base.BaseAction):
 		'dir':'/var/www/vhosts/deployments/dtesting',
 	})
 	"""
-	
-	not_a_repo="(?i)Not a git repository"
 	
 	def setup(self):
 		self.meta.action_name="GitUpdateAction"
@@ -33,7 +30,7 @@ class GitUpdateAction(base.BaseAction):
 		if not shell: raise exceptions.ActionRequirementsError(messages.missing_ssh_session % self.meta.action_name)
 		shell.mk_and_cd(self.dirl)
 		shell.command("git log -1 | grep commit")
-		i=shell.expect(["commit .*",self.not_a_repo,shell.cmnf,shell.eof,shell.timeout])
+		i=shell.expect(["commit .*",pexpects.not_a_repo,shell.cmnf,shell.eof,shell.timeout])
 		if i==1: exception=exceptions.SSHErrorDetected(messages.git_not_a_repo % self.dirl)
 		elif i==2: exception=exceptions.SSHErrorDetected(messages.git_not_installed)
 		elif i>2: exception=exceptions.ActionError(messages.pexpect_timeout % self.meta.action_name)
@@ -45,7 +42,7 @@ class GitUpdateAction(base.BaseAction):
 		shell.command("git pull origin master")
 		#TODO: add expect for when "master" branch isn't setup correctly
 		#TODO: add expect for when the wrong remote is used.. like orign
-		i=shell.expect([shell.permission,shell.cmnf,self.not_a_repo,shell.eof,shell.timeout])
+		i=shell.expect([shell.permission,shell.cmnf,pexpects.not_a_repo,shell.eof,shell.timeout])
 		if i==0: exception=exceptions.SSHErrorDetected(messages.permission_denied % self.meta.action_name)
 		elif i==1: exception=exceptions.SSHErrorDetected(messages.git_not_installed)
 		elif i==2: exception=exceptions.SSHErrorDetected(messages.git_not_a_repo % self.dirl)

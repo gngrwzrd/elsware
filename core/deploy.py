@@ -5,8 +5,7 @@ except ImportError:
 	exit()
 
 import traceback,sys
-import actions,support,messaging
-from elsware.exsept import exceptions
+import actions,support,messaging,exceptions
 
 def deploy(deployments_hash,instruction_names,**kwargs):
 	"""

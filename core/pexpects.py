@@ -1,0 +1,1 @@
+not_a_repo="(?i)Not a git repository"

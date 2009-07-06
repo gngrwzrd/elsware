@@ -4,7 +4,7 @@ DEPLOYMENTS={
 		'admin@slicehost':{
 			'host':'67.23.1.83',
 			'user':'admin',
-			'password':'L4unChP4D',
+			'password_in_opt':'slicehost',
 			'apache':{
 				'apachectl':'/usr/sbin/apachectl',
 				'sudo':True,
@@ -63,7 +63,7 @@ DEPLOYMENTS={
 		},
 	},
 	
-  'slicehost':{
+  'slicehost_1':{
     'actions':({
 			'transaction':('login','update','logout')
 		},),
@@ -72,16 +72,6 @@ DEPLOYMENTS={
 			'server':'admin@slicehost',
 			'dir':'/var/www/vhosts/deployments/dtesting',
 		},
-		'nginx_restart':{
-			'action_class':'nginx_restart',
-			'pidfile':'/var/run/nginx.pid',
-			'conf':'/etc/nginx/nginx.conf',
-		},
-		'nginx_stop':{
-			'action_class':'killpid',
-			'pidfile':'/var/run/nginx.pid',
-		},
-		
     'login':{
 			'action_class':'ssh_login',
 			'server':'admin@slicehost',
@@ -91,6 +81,30 @@ DEPLOYMENTS={
 			'action_class':'ssh_logout',
 			'server':'admin@slicehost',
 		},	 
+	},
+	
+	'slicehost_2':{
+    'actions':({
+			'transaction':('email','login','update','logout')
+		},),
+		'update':{
+			'action_class':'git_update',
+			'server':'admin@slicehost',
+			'dir':'/var/www/vhosts/deployments/dtesting',
+		},
+    'login':{
+			'action_class':'ssh_login',
+			'server':'admin@slicehost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'admin@slicehost',
+		},
+		'email':{
+			'action_class':'email_admins',
+			'from':'aaron@rubyamf.org',
+			'subject':'Test email admins',
+		},
 	}
 	
 }
@@ -146,6 +160,7 @@ DEPLOYMENTS={
 #	'server':'localhost',
 #	'dir':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo',
 #	'ports':(8024,8025,8026),
+# 'protocol':'fcgi|scgi|ajp'
 #	'method':'preforked',
 #	'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
 #	'host':'127.0.0.1',
