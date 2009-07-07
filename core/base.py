@@ -168,3 +168,14 @@ class BaseAction(object):
 		use it to tear down anything necessary.
 		"""
 		pass
+	
+	def client_setup(self):
+		"""
+		A hook, use this to initialize clients - like an
+		ssh login.
+		"""
+	def client_teardown(self):
+		"""
+		A hook, use this to teardown any clients that this
+		action chain is using.
+		"""

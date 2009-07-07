@@ -24,7 +24,6 @@ DEPLOYMENTS={
 		  }
 		}
 	},
-	
 	'localhost_1':{
 		'actions':({
 			'transaction':('login','nginx_stop','logout')
@@ -41,8 +40,7 @@ DEPLOYMENTS={
 			'action_class':'nginx_stop',
 			'server':'localhost',
 		},
-	},
-	
+	},	
 	'localhost_2':{
 		'actions':({
 			'transaction':('login','nginx_restart','logout')
@@ -59,8 +57,7 @@ DEPLOYMENTS={
 			'action_class':'nginx_restart',
 			'server':'localhost',
 		},
-	},
-	
+	},	
 	'localhost_3':{
 		'actions':({
 			'transaction':('login','fcgi_restart','logout')
@@ -93,7 +90,6 @@ DEPLOYMENTS={
 			'maxrequests':'1500',
 		}
 	},
-	
 	'localhost_4':{
 		'actions':({
 			'transaction':('login','fcgi_stop','logout')
@@ -117,7 +113,6 @@ DEPLOYMENTS={
 			'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
 		}
 	},
-	
 	'localhost_5':{
 		'actions':({
 			'transaction':('login','fcgi_restart','logout')
@@ -150,7 +145,6 @@ DEPLOYMENTS={
 			'maxrequests':'1500',
 		}
 	},
-	
 	'localhost_6':{
 		'actions':({
 			'transaction':('login','fcgi_stop','logout')
@@ -176,7 +170,40 @@ DEPLOYMENTS={
 			'protocol':'fcgi',
 		}
 	},
-	
+	'slicehost_3':{
+		'actions':({
+			'transaction':('login','stopapache','logout'),
+		},),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'admin@slicehost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'admin@slicehost',
+		},
+		'stopapache':{
+			'action_class':'apache_stop',
+			'server':'admin@slicehost',
+		},
+	},
+	'slicehost_4':{
+		'actions':({
+			'transaction':('login','startapache','logout'),
+		},),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'admin@slicehost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'admin@slicehost',
+		},
+		'startapache':{
+		  'action_class':'apache_start',
+		  'server':'admin@slicehost',
+		},
+	},
   'slicehost_1':{
     'actions':({
 			'transaction':('login','update','logout')
@@ -190,13 +217,28 @@ DEPLOYMENTS={
 			'action_class':'ssh_login',
 			'server':'admin@slicehost',
 		},
-		
 		'logout':{
 			'action_class':'ssh_logout',
 			'server':'admin@slicehost',
 		},	 
 	},
-	
+	'slicehost_5':{
+		'actions':({
+			'transaction':('login','restartapache','logout'),
+		},),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'admin@slicehost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'admin@slicehost',
+		},
+		'restartapache':{
+		  'action_class':'apache_restart',
+		  'server':'admin@slicehost',
+		},
+	},
 	'slicehost_2':{
     'actions':({
 			'transaction':('email','login','update','logout')
@@ -220,7 +262,6 @@ DEPLOYMENTS={
 			'subject':'Test email admins',
 		},
 	}
-	
 }
 
 #'request':{
@@ -229,7 +270,6 @@ DEPLOYMENTS={
 #},
 
 #git update:
-
 
 #scp
 #'scp':{

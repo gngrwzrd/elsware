@@ -12,7 +12,7 @@ class BaseNginx(base.BaseAction):
 		'server':'localhost',
 	},
 	
-	Required server information you need to define:
+	Required server information:
 	
 	'servers':{
 		'localhost':{
@@ -31,10 +31,10 @@ class BaseNginx(base.BaseAction):
 	def validate(self):
 		self.servername=self.get_server_name(True)
 		self.serverinfo=self.get_server_info(True)
-		self.password=self.get_keyvalue_in_first("password",self.action_info,self.serverinfo,self.nginx)
-		if not self.password: self.password=self.get_password_in_opt(self.action_info,self.nginx,self.serverinfo)
 		self.nginx=self.serverinfo.get("nginx",False)
 		self.pidfile=self.get_keyvalue_in_first("pidfile",self.action_info,self.nginx)
+		self.password=self.get_keyvalue_in_first("password",self.action_info,self.serverinfo,self.nginx)
+		if not self.password: self.password=self.get_password_in_opt(self.action_info,self.nginx,self.serverinfo)
 		if not self.nginx: raise exceptions.ActionRequirementsError(messages.nginx_info_missing % self.meta.action_name)
 		if not self.pidfile: raise exceptions.ActionRequirementsError(messages.missing_pidfile % self.meta.action_name)
 		if not self.password: raise exceptions.ActionRequirementsError(messages.missing_password % self.meta.action_name)

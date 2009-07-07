@@ -1,6 +1,7 @@
-#django stuff for fcgi
+#add client_setup_action
+#add client_teardown_action
+#move apachectl into action_info OR server info, isntead of the "apache" key in server lookup
 #sql actions
-#organize common errors into ActionErrors class
 #scp push zip action
 #todos in scp action
 #ftp actions

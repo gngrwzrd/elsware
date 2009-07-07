@@ -5,6 +5,7 @@ from elsware.transfer import scp
 from elsware.scm import git,svn
 from elsware.servers import apache
 from elsware.servers import nginx
+from elsware.compress import tar,zip
 
 def register_action_class(action_name,clazz):
 	"""
@@ -159,6 +160,10 @@ register_action_class('killpid',pid.KillPID)
 register_action_class('stdout',messaging.StdoutAction)
 register_action_class('request',http.HttpRequestAction)
 register_action_class('exception',RaiseExceptionAction)
+register_action_class('zip',zip.ZipAction)
+register_action_class('unzip',zip.UnzipAction)
+register_action_class('tag',tar.TarAction)
+register_action_class('untar',tar.UntarAction)
 
 try:
 	from elsware.django import email as jango_email
