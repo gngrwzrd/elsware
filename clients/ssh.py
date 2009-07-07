@@ -3,15 +3,23 @@ from elsware.core import base,exceptions,messages
 
 class SSHLoginAction(base.BaseAction):
 	"""
-	Logs a user into an ssh session. It stores
-	the ssh session as a variable on the deployment
-	object that's passed around (deployment.ssh)
+	Logs a user into an ssh session.
 	
-	Supported Action Parameter:
+	Required action parameter:
 	'login':{
 		'action_class':'ssh_login',
 		'server':'admin@slicehost'
 	},
+	
+	Required server information:
+	
+	'servers':{
+		'localhost':{
+			'host':'127.0.0.1',
+			'user':'aaronsmith',
+			'password_in_opt':'localhost'
+		}
+	}
 	"""
 	
 	def setup(self):
@@ -48,7 +56,8 @@ class SSHLogoutAction(base.BaseAction):
 	"""
 	Logs out of an ssh session.
 	
-	Supported Action Parameters:
+	Required action Parameters:
+	
 	'logout':{
 		'action_class':'ssh_logout',
 		'server':'admin@slicehost',
@@ -86,6 +95,7 @@ class SSHSession():
 	
 	def __init__(self):
 		self.session=pxssh.pxssh()
+		self.has_sudoed=False
 	
 	def expect(self,options):
 		"""
@@ -104,6 +114,26 @@ class SSHSession():
 			raise
 		except pxssh.EOF:
 			raise exceptions.SSHErrorDetected("An ssh error occured locally that halted logging into the remote machine. This happens VERY INFREQUENTLY. Try running elsware again.")
+	
+	def permission_denied_error(self,action_name_for_error):
+		"""
+		A shortcut to throw a permission denied error
+		"""
+		raise exceptions.SSHErrorDetected(messages.permission_denied % action_name_for_error)
+	
+	def sudo_command(self,cmd,password):
+		"""
+		Send any sudo command, and this wraps up logic
+		to raise an error when permission denied.
+		"""
+		self.command(cmd)
+		i=self.expect([self.sudo_password,self.eof,self.timeout])
+		if i==0:
+			self.command(password)
+			j=self.expect([self.try_again,self.eof,self.timeout])
+			if j==0: return False
+		#if i==1 or i==2: return False;
+		return True
 	
 	def command(self,command):
 		"""

@@ -8,6 +8,14 @@ class EmailAdminsAction(base.BaseAction):
 	email's them all the messages collected in
 	self.deployment.messages, it's in the same
 	format as messages.StdoutAction.
+	
+	Required action parameters:
+	
+	'email':{
+		'action_class':'email_admins',
+		'from':'aaron@rubyamf.org',
+		'subject':'Test email admins',
+	},
 	"""
 	
 	def setup(self):

@@ -6,6 +6,14 @@ class KillPID(base.BaseAction):
 	"""
 	Generic way to stop a process from a
 	pid file.
+	
+	Required action parameters:
+	
+	'killpid':{
+		'action_class':'killpid',
+		'server':'localhost',
+		'pidfile':'/var/run/mypid.pid',
+	}
 	"""
 	def setup(self):
 		self.meta.action_name="KillPID"

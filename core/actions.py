@@ -16,7 +16,7 @@ class ActionRunner(object):
 	"""
 	Runs an action list from a deployment instruction set.
 	
-	The action runner instantiates, and runs actions in this
+	The action runner instantiates and runs actions in this
 	order:
 	
 		1. setup()
@@ -32,8 +32,11 @@ class ActionRunner(object):
 	Transaction EX:
 	
 	'actions':(
-	{'transaction':('login','update','logout')}
+		{'transaction':('login','update','logout')}
 	)
+	
+	For each action, it will run the revert() method,
+	in reverse order from where the error occured.
 	"""
 	
 	def __init__(self,deployment,actions,transaction=False):
@@ -41,7 +44,9 @@ class ActionRunner(object):
 		Constructor for ActionRunner.
 		
 		The deployment instance is an instance of setup.Deployment.
+		
 		The actions is a list of actions to run.
+		
 		The transaction is a boolean indicating transaction mode or not.
 		"""
 		self.transaction=transaction
@@ -160,5 +165,6 @@ try:
 	from elsware.django import fcgi as jango_fcgi
 	register_action_class('email_admins',jango_email.EmailAdminsAction)
 	register_action_class('django_fcgi_restart',jango_fcgi.RestartDjangoFCGIAction)
+	register_action_class("django_fcgi_stop",jango_fcgi.StopDjangoFCGIAction)
 except ImportError:
 	pass

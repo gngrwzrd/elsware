@@ -26,8 +26,11 @@ missing_pidfiles="The %s action requires a 'pidfiles' parameter."
 missing_socket="The %s action requires a 'socket' parameter."
 missing_host="The %s action requires a 'host' parameter."
 missing_port="The %s action requires a 'port' parameter."
+missing_ports="The %s action requires a 'ports' parameter."
 missing_socket_and_host="The %s action requires a 'socket' or 'host' parameter."
+incorrect_has_socket_and_host="The %s action requires a 'socket' or 'host' parameter, but not both"
 missing_port_with_host="The action %s requires a 'host', and 'port' parameter."
+missing_ports_with_host="The action %s requires a 'host', and 'ports' parameter."
 missing_conf="The action %s requires a 'conf' parameter."
 
 #missing settings for django actions
@@ -60,4 +63,6 @@ nginx_info_missing="Nginx actions require an 'nginx' lookup dict in the server i
 missing_nginx_bin="Nginx server information needs to have the 'bin' parameter defined"
 nginx_missing_conf="Nginx server information needs to have the 'conf' parameter defined"
 
-
+#django
+incorrect_fcgi_method="The django runfcgi command only accepts prefork, or threaded as the child spawning method."
+incorrect_protocol="The django runfcgi command only accepts fcgi, scgi, or ajp as the process protocol"

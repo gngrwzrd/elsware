@@ -1,14 +1,10 @@
-from elsware.core import base,exceptions,messages
+from elsware.core import base,exceptions,messages,pexpects
 from elsware.clients import ssh
 
 class BaseApacheAction(base.BaseAction):
 	"""
 	Base apache action that contains re-usable methods.
 	"""
-	
-	permissions="(?i)Permission denied"
-	bind_problem="(?i)could not bind"
-	not_running="(?i)not running"
 
 	def setup(self):
 		self.meta.action_name="BaseApacheAction"
@@ -46,7 +42,7 @@ class BaseApacheAction(base.BaseAction):
 		apachectl command, which was run with sudo.
 		"""
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		i=shell.expect([shell.cmnf,shell.sudo_password,self.permissions,self.bind_problem,shell.eof,shell.timeout])
+		i=shell.expect([shell.cmnf,shell.sudo_password,pexpects.permissions,pexpects.bind_problem,shell.eof,shell.timeout])
 		if i==0: raise exceptions.SSHErrorDetected(messages.apache_command_not_found)
 		if i==1:
 			shell.command(self.password)
@@ -61,7 +57,7 @@ class BaseApacheAction(base.BaseAction):
 		apachectl command
 		"""
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
-		i=shell.expect([shell.cmnf,self.not_running,self.permissions,self.bind_problem,shell.eof,shell.timeout])
+		i=shell.expect([shell.cmnf,self.not_running,pexpects.permissions,pexpects.bind_problem,shell.eof,shell.timeout])
 		if i==0: raise exceptions.SSHErrorDetected(messages.apache_command_not_found)
 		if i==1: raise exceptions.SSHErrorDetected(messages.apache_not_running)
 		if i==2: raise exceptions.SSHErrorDetected(messages.permission_denied % self.meta.action_name)

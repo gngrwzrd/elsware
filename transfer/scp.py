@@ -5,23 +5,7 @@ from elsware.clients import ssh
 class SCPPushAction(base.BaseAction):
 	"""
 	The SCP Push action pushes files up to a server
-	through scp. Note that because scp is technically
-	just over ssh, it's assumed ssh access will work,
-	and requires an ssh session concurrently with
-	the scp process. (The scp action takes care of
-	making the ssh session if one isn't already logged
-	in)
-	
-	In order to implement transactions, this action
-	first logs into your server over ssh, makes a
-	backup for the target server directory.
-	
-	Files from local are then SCP copied to the server.
-	If transactions need to rallback, the tmp folder
-	is moved back to the original folder.
-	
-	Finalization goes back onto the server through
-	the ssh session, and deletes the tmp folder.
+	through scp.
 	"""
 	
 	def setup(self):

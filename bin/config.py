@@ -17,8 +17,6 @@ DEPLOYMENTS={
 			'host':'127.0.0.1',
 			'user':'aaronsmith',
 			'password_in_opt':'localhost',
-			'django_fcgi':{
-			},
 			'nginx':{
 				'bin':'/usr/local/sbin/nginx',
 				'conf':'/etc/nginx/nginx.conf',
@@ -61,6 +59,122 @@ DEPLOYMENTS={
 			'action_class':'nginx_restart',
 			'server':'localhost',
 		},
+	},
+	
+	'localhost_3':{
+		'actions':({
+			'transaction':('login','fcgi_restart','logout')
+		}),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'localhost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'localhost',
+		},
+		'nginx_restart':{
+			'action_class':'nginx_restart',
+			'server':'localhost',
+		},
+		'fcgi_restart':{
+			'action_class':'django_fcgi_restart',
+			'server':'localhost',
+			'dir':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo',
+			#'socket':'/tmp/djang_fcgi.sock',
+			'host':'127.0.0.1',
+			'ports':(8024,8025,8026),
+			'protocol':'fcgi',
+			'method':'prefork',
+			'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
+			'maxspare':'5',
+			'minspare':'2',
+			'maxchildren':'45',
+			'maxrequests':'1500',
+		}
+	},
+	
+	'localhost_4':{
+		'actions':({
+			'transaction':('login','fcgi_stop','logout')
+		}),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'localhost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'localhost',
+		},
+		'nginx_restart':{
+			'action_class':'nginx_restart',
+			'server':'localhost',
+		},
+		'fcgi_stop':{
+			'action_class':'django_fcgi_stop',
+			'server':'localhost',
+			'ports':(8024,8025,8026),
+			'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
+		}
+	},
+	
+	'localhost_5':{
+		'actions':({
+			'transaction':('login','fcgi_restart','logout')
+		}),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'localhost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'localhost',
+		},
+		'nginx_restart':{
+			'action_class':'nginx_restart',
+			'server':'localhost',
+		},
+		'fcgi_restart':{
+			'action_class':'django_fcgi_restart',
+			'server':'localhost',
+			'dir':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo',
+			'socket':'/tmp/djang_fcgi.sock',
+			#'host':'127.0.0.1',
+			#'ports':(8024,8025,8026),
+			'protocol':'fcgi',
+			'method':'prefork',
+			'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
+			'maxspare':'5',
+			'minspare':'2',
+			'maxchildren':'45',
+			'maxrequests':'1500',
+		}
+	},
+	
+	'localhost_6':{
+		'actions':({
+			'transaction':('login','fcgi_stop','logout')
+		}),
+		'login':{
+			'action_class':'ssh_login',
+			'server':'localhost',
+		},
+		'logout':{
+			'action_class':'ssh_logout',
+			'server':'localhost',
+		},
+		'nginx_restart':{
+			'action_class':'nginx_restart',
+			'server':'localhost',
+		},
+		'fcgi_stop':{
+			'action_class':'django_fcgi_stop',
+			'server':'localhost',
+			'dir':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo',
+			'socket':'/tmp/djang_fcgi.sock',
+			'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
+			'protocol':'fcgi',
+		}
 	},
 	
   'slicehost_1':{
@@ -153,20 +267,4 @@ DEPLOYMENTS={
 #	'server':'admin@slicehost',
 #	'url':'http://django-dilla.googlecode.com/svn/trunk/dilla/',
 #	'dir':'/var/www/vhosts/deployments/dilla/'
-#},
-
-#'fcgi_restart':{
-#	'action_class':'django_fcgi_restart',
-#	'server':'localhost',
-#	'dir':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo',
-#	'ports':(8024,8025,8026),
-# 'protocol':'fcgi|scgi|ajp'
-#	'method':'preforked',
-#	'pidfiles':'/Users/aaronsmith/dev/_projects/_git/rallyo/django/rallyo/serve/fcgi/',
-#	'host':'127.0.0.1',
-#	'maxspare':'5',
-#	'minspare':'2',
-#	'maxchildren':'45',
-#	'maxrequests':'1500',
-#	'socket':'/tmp/djang_fcgi.sock',
 #},

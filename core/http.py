@@ -9,11 +9,12 @@ class HttpRequestAction(base.BaseAction):
 	scripts, or fcgi handlers in apache, that
 	proxy mail server restarts.
 	
-	Supported Action Parameters:
+	Required action Parameters:
+	
 	'request':{
 		'action_class':'request',
 		'url':'http://www.google.com/',
-		'data':{}, #sends data post
+		#[optional]'data':{}, #sends data post
 	},
 	"""
 	

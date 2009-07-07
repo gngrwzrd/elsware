@@ -6,7 +6,7 @@ class GitUpdateAction(base.BaseAction):
 	"""
 	GIT repo update action.
 	
-	Supported Action Parameters:
+	Required action Parameters:
 	'gitupdate':({
 		'action_class':'git_update',
 		'server':'admin@slicehost',

@@ -11,10 +11,10 @@ class SvnUpdateAction(base.BaseAction):
 	runs rm -rf ./*, then does an update. The latter
 	is default.
 	
-	Supported Action Parameters:
+	Required action Parameters:
 	'svnupdate':{
 		'action_class':'svn_update',
-		'force_checkout':True|False, #default: False
+		#[optional]'force_checkout':True|False, #default: False
 		'server':'admin@slicehost',
 		'url':'http://django-dilla.googlecode.com/svn/trunk/dilla/',
 		'dir':'/var/www/vhosts/deployments/dilla/'
@@ -67,8 +67,7 @@ class SvnUpdateAction(base.BaseAction):
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
 		if not shell: raise exceptions.TransactionRevertError(messages.missing_ssh_session % self.meta.action_name)
 		shell.mk_and_cd(self.dirl)
-		if self.force_checkout:
-			shell.command("svn --force checkout " + self.url + " .")
+		if self.force_checkout: shell.command("svn --force checkout " + self.url + " .")
 		else:
 			shell.command("rm -rf ./*")
 			shell.command("svn update " + self.url + " .")
