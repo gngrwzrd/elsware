@@ -8,6 +8,7 @@
 <pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
 <path>/Users/aaronsmith/dev/_projects/_git</path>
 </pydev_pathproperty>
+
 <pydev_pathproperty name="org.python.pydev.PROJECT_SOURCE_PATH">
 <path>/elsware</path>
 </pydev_pathproperty>

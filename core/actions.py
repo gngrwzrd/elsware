@@ -5,7 +5,7 @@ from elsware.transfer import scp
 from elsware.scm import git,svn
 from elsware.servers import apache
 from elsware.servers import nginx
-from elsware.compress import tar,zip
+from elsware.servers import lighttpd
 
 def register_action_class(action_name,clazz):
 	"""
@@ -125,7 +125,7 @@ class ActionRunner(object):
 		for instance in self.actions_list:
 			if hasattr(instance,"finalize"):instance.finalize()
 		for instance in self.actions_list:
-			if hasattr(instance,"finalize"):instance.teardown()
+			if hasattr(instance,"teardown"):instance.teardown()
 
 class ActionClasses():
 	"""
@@ -150,9 +150,10 @@ register_action_class('ssh_logout',ssh.SSHLogoutAction)
 register_action_class('apache_stop',apache.ApacheStopAction)
 register_action_class('apache_start',apache.ApacheStartAction)
 register_action_class('apache_restart',apache.ApacheRestartAction)
-register_action_class("nginx_restart",nginx.NginxRestartAction)
-register_action_class("nginx_stop",nginx.NginxStopAction)
-register_action_class('exception',RaiseExceptionAction)
+register_action_class('lighttpd_restart',lighttpd.LighttpdRestartAction)
+register_action_class('lighttpd_stop',lighttpd.LighttpdStopAction)
+register_action_class('nginx_restart',nginx.NginxRestartAction)
+register_action_class('nginx_stop',nginx.NginxStopAction)
 register_action_class('git_update',git.GitUpdateAction)
 register_action_class("svn_update",svn.SvnUpdateAction)
 register_action_class('scp',scp.SCPPushAction)
@@ -162,7 +163,7 @@ register_action_class('request',http.HttpRequestAction)
 register_action_class('exception',RaiseExceptionAction)
 register_action_class('zip',zip.ZipAction)
 register_action_class('unzip',zip.UnzipAction)
-register_action_class('tag',tar.TarAction)
+register_action_class('tar',tar.TarAction)
 register_action_class('untar',tar.UntarAction)
 
 try:

@@ -48,7 +48,6 @@ class SCPPushAction(base.BaseAction):
 		child.interact()
 	
 	def revert(self):
-		from core import actions
 		shell=self.get_logged_in_client(self.servername,ssh.SSHSession.protocol)
 		if not shell: raise exceptions.TransactionRevertError(messages.missing_ssh_session % self.meta.action_name)
 		shell.command("rm -rf "+self.serverdir+"/*")

@@ -49,18 +49,6 @@ class NginxRestartAction(BaseNginx):
 		'action_class':'nginx_restart',
 		'server':'localhost',
 	}
-	
-	Required server information you need to define:
-	
-	'servers':{
-		'localhost':{
-			'nginx':{
-				'bin':'/usr/local/sbin/nginx',
-				'conf':'/etc/nginx/nginx.conf',
-				'pidfile':'/var/run/nginx.pid'
-			}
-		}
-	}
 	"""
 	def setup(self):
 		self.meta.action_name="NginxRestartAction"

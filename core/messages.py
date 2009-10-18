@@ -63,6 +63,11 @@ nginx_info_missing="Nginx actions require an 'nginx' lookup dict in the server i
 missing_nginx_bin="Nginx server information needs to have the 'bin' parameter defined"
 nginx_missing_conf="Nginx server information needs to have the 'conf' parameter defined"
 
+#lighttpd
+lighttpd_info_missing="Lighttpd actions require an 'lighttpd' lookup dict in the server information."
+missing_lighttpd_bin="Lighttpd server information needs to have the 'bin' parameter defined"
+lighttpd_missing_conf="Lighttpd server information needs to have the 'conf' parameter defined"
+
 #django
 incorrect_fcgi_method="The django runfcgi command only accepts prefork, or threaded as the child spawning method."
 incorrect_protocol="The django runfcgi command only accepts fcgi, scgi, or ajp as the process protocol"

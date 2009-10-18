@@ -25,7 +25,7 @@ class BaseApacheAction(base.BaseAction):
 		self.servername=self.get_server_name(True)
 		self.serverinfo=self.get_server_info(True)
 		self.apacheinfo=self.serverinfo.get("apache",False)
-		self.apachectl=self.apacheinfo.get("apachectl",False)
+		self.apachectl=self.get_keyvalue_in_first("apachectl",self.action_info,self.apacheinfo)
 		if not self.apacheinfo: raise exceptions.ActionRequirementsError(messages.apache_info_missing)
 		if not self.apachectl: raise exceptions.ActionRequirementsError(messages.apache_missing_apachectl)
 		password=self.get_password(self.apacheinfo,self.serverinfo,self.action_info,self.deployment.options)

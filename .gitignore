@@ -1,7 +1,7 @@
-*.pyc
-.DS_
+.pyc
+.DS_Store
 __MAC
 .project
 .pydevproject
 docs
-docs/**/*
+docs/
